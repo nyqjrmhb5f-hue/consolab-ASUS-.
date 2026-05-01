@@ -1,0 +1,16 @@
+node_modules/
+frontend/node_modules/
+.env
+.env.*
+*.pem
+*.key
+*.seed
+*.secret
+.keys/
+*.pem
+*.key
+id_ed25519*
+.env
+.env.*
+node_modules/
+frontend/node_modules/
