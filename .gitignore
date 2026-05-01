@@ -7,10 +7,8 @@ frontend/node_modules/
 *.seed
 *.secret
 .keys/
-*.pem
-*.key
 id_ed25519*
-.env
-.env.*
-node_modules/
-frontend/node_modules/
+
+# runtime evidence hot files
+04_EVIDENCE_ROOM/actions/events.jsonl
+*.log
