@@ -1,0 +1,24 @@
+{
+  "tracking_id": "20260403T223111885Z-9e4d6d6c",
+  "action": "read_chronos",
+  "command_class": "standard",
+  "lifecycle_state": "sealed",
+  "signature": {
+    "event_id": "20260403T223111902Z-717b5b385bfc3a20",
+    "tx_hash": "717b5b385bfc3a204e422313fa909e7780b07455827e5a5ac63b6c367b0e90e6",
+    "signing_key_id": "test-ed25519",
+    "attestation_state": "signed",
+    "verification_state": "verified",
+    "key_type": "ed25519"
+  },
+  "targets": {
+    "attestation_log": "04_EVIDENCE_ROOM/attestations/events.jsonl",
+    "signer_events": "04_EVIDENCE_ROOM/signer_events/events.jsonl"
+  },
+  "detail": {
+    "approval_scope": null
+  },
+  "created_at": "2026-04-03T22:31:11.905Z",
+  "ref_kind": "signature",
+  "lane": "runtime"
+}

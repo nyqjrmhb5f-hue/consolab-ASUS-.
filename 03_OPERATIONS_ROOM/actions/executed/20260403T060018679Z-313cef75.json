@@ -1,0 +1,159 @@
+{
+  "tracking_id": "20260403T060018679Z-313cef75",
+  "action": "read_gateway_status",
+  "target": null,
+  "details": {},
+  "requested_by": "verification-hardening",
+  "source": "operator_console",
+  "channel": "gateway_api",
+  "risk": "standard",
+  "command_class": "standard",
+  "approvals_required": [],
+  "policy_version": "command-classes.v1",
+  "policy": {
+    "evidence_level": "sealed_trace",
+    "execution_timeout_ms": 15000,
+    "rollback_required": false,
+    "tunnel_required": false,
+    "approval_scopes": []
+  },
+  "idempotency_key": "demo-read-gateway-003",
+  "correlation_id": "corr-demo-003",
+  "received_at": "2026-04-03T06:00:18.679Z",
+  "status": "completed",
+  "control_state": "sealed",
+  "command_hash": "439725cb84739c39a11d86405eb3bc6a27209648e5c10b02da1cc75fc4786901",
+  "dispatch_state": {
+    "status": "completed",
+    "started_at": "2026-04-03T06:00:18.684Z",
+    "dispatched_by": "gateway_api",
+    "completed_at": "2026-04-03T06:00:18.689Z"
+  },
+  "evidence_state": "sealed",
+  "result": {
+    "kind": "gateway_status",
+    "status": {
+      "timestamp": "2026-04-03T06:00:18.688Z",
+      "service": "GATEWAY-API",
+      "status": "UP",
+      "schema": "command-envelope.v1",
+      "queues": {
+        "intake": 2,
+        "executive_approvals": 1,
+        "tunnel_approvals": 1,
+        "agent_sessions": 10
+      }
+    },
+    "feed": {
+      "timestamp": "2026-04-03T06:00:18.689Z",
+      "service": "GATEWAY-API",
+      "items": [
+        {
+          "tracking_id": "20260403T060018679Z-313cef75",
+          "action": "read_gateway_status",
+          "status": "accepted",
+          "control_state": "accepted",
+          "risk": "standard",
+          "command_class": "standard",
+          "requested_by": "verification-hardening",
+          "source": "operator_console",
+          "received_at": "2026-04-03T06:00:18.679Z",
+          "idempotency_key": "demo-read-gateway-003",
+          "correlation_id": "corr-demo-003",
+          "command_hash": "439725cb84739c39a11d86405eb3bc6a27209648e5c10b02da1cc75fc4786901"
+        },
+        {
+          "tracking_id": "20260403T055625957Z-a66a1c03",
+          "action": "read_gateway_status",
+          "status": "accepted",
+          "control_state": "accepted",
+          "risk": "standard",
+          "command_class": "standard",
+          "requested_by": "verification-hardening",
+          "source": "operator_console",
+          "received_at": "2026-04-03T05:56:25.958Z",
+          "idempotency_key": "demo-read-gateway-002",
+          "correlation_id": "corr-demo-002",
+          "command_hash": "1c2d2a8fc8ba6641e2fa2f93d5d28d50bf9ac6dc77943ae6717dd57770550916"
+        },
+        {
+          "tracking_id": "20260403T055518156Z-0eb326fe",
+          "action": "read_gateway_status",
+          "status": "accepted",
+          "control_state": "accepted",
+          "risk": "standard",
+          "command_class": "standard",
+          "requested_by": "verification-hardening",
+          "source": "operator_console",
+          "received_at": "2026-04-03T05:55:18.156Z",
+          "idempotency_key": "demo-read-gateway-001",
+          "correlation_id": "corr-demo-001",
+          "command_hash": "1c2d2a8fc8ba6641e2fa2f93d5d28d50bf9ac6dc77943ae6717dd57770550916"
+        },
+        {
+          "tracking_id": "20260403T042614043Z-e3cd79f0",
+          "action": "read_chronos",
+          "status": "accepted",
+          "risk": "standard",
+          "requested_by": "verification-run-2",
+          "source": "operator_console",
+          "received_at": "2026-04-03T04:26:14.043Z"
+        },
+        {
+          "tracking_id": "20260403T042509415Z-e969e1fa",
+          "action": "open_remote_tunnel",
+          "status": "pending_approval",
+          "risk": "high",
+          "requested_by": "verification-run",
+          "source": "operator_console",
+          "received_at": "2026-04-03T04:25:09.415Z"
+        },
+        {
+          "tracking_id": "20260403T042509379Z-989f6a84",
+          "action": "read_gateway_status",
+          "status": "accepted",
+          "risk": "standard",
+          "requested_by": "verification-run",
+          "source": "operator_console",
+          "received_at": "2026-04-03T04:25:09.379Z"
+        },
+        {
+          "tracking_id": "20260403T041649988Z-e3294e4e",
+          "action": "open_remote_tunnel",
+          "status": "pending_approval",
+          "risk": "high",
+          "requested_by": "codex",
+          "source": "operator_console",
+          "received_at": "2026-04-03T04:16:49.988Z"
+        },
+        {
+          "tracking_id": "20260403T041649985Z-83c58b5c",
+          "action": "read_chronos",
+          "status": "accepted",
+          "risk": "standard",
+          "requested_by": "codex",
+          "source": "operator_console",
+          "received_at": "2026-04-03T04:16:49.986Z"
+        },
+        {
+          "tracking_id": "20260403T035323494Z-9daa2f24",
+          "action": "refresh_room_state",
+          "status": "accepted",
+          "risk": "standard",
+          "requested_by": "codex",
+          "source": "operator_console",
+          "received_at": "2026-04-03T03:53:23.494Z"
+        },
+        {
+          "tracking_id": "20260403T035323491Z-28c6e683",
+          "action": "open_remote_tunnel",
+          "status": "pending_approval",
+          "risk": "high",
+          "requested_by": "codex",
+          "source": "operator_console",
+          "received_at": "2026-04-03T03:53:23.491Z"
+        }
+      ]
+    }
+  }
+}

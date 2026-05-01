@@ -1,0 +1,34 @@
+{
+  "engine": "CHRONOS",
+  "timezone": "UTC",
+  "items": [
+    {
+      "id": "room_state_refresh",
+      "label": "Room State Refresh",
+      "type": "interval_minutes",
+      "interval_minutes": 30,
+      "target_room": "05_CENTRAL_BRAIN"
+    },
+    {
+      "id": "evidence_snapshot_hourly",
+      "label": "Evidence Snapshot",
+      "type": "interval_minutes",
+      "interval_minutes": 60,
+      "target_room": "04_EVIDENCE_ROOM"
+    },
+    {
+      "id": "daily_commercial_report",
+      "label": "Daily Commercial Report",
+      "type": "daily_utc",
+      "time_utc": "13:00",
+      "target_room": "02_COMMERCIAL_ROOM"
+    },
+    {
+      "id": "daily_deployment_window",
+      "label": "Deployment Window Review",
+      "type": "daily_utc",
+      "time_utc": "17:00",
+      "target_room": "09_DEPLOYMENT"
+    }
+  ]
+}

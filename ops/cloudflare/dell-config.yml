@@ -1,0 +1,20 @@
+tunnel: vyrdon-dell-console
+credentials-file: /etc/cloudflared/creds/dell-tunnel.json
+
+ingress:
+  - hostname: console.vyrdx.vyrdon.com
+    service: http://nginx:8080
+    originRequest:
+      httpHostHeader: console.vyrdx.vyrdon.com
+
+  - hostname: api.vyrdx.vyrdon.com
+    service: http://backend:3001
+    originRequest:
+      httpHostHeader: api.vyrdx.vyrdon.com
+      connectTimeout: 10s
+      noTLSVerify: true
+
+  - hostname: ssh.dell.vyrdx.vyrdon.com
+    service: ssh://127.0.0.1:22
+
+  - service: http_status:404

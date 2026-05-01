@@ -1,0 +1,10 @@
+{
+  "idempotency_key": "proof-pending-002",
+  "tracking_id": "20260403T091220022Z-6b7ec1bf",
+  "correlation_id": "proof-pending-002",
+  "command_hash": "65cc5c9aa57b286825217a67db8a7554c22467753c935d711831622a1dafe37a",
+  "action": "open_remote_tunnel",
+  "status": "pending_approval",
+  "control_state": "pending_approval",
+  "created_at": "2026-04-03T09:12:20.022Z"
+}

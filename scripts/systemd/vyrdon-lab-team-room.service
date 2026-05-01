@@ -1,0 +1,8 @@
+[Unit]
+Description=VYRDON Lab Console - Update Team Room (read-only)
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/t79/vyrdon/consolelab
+ExecStart=/usr/bin/node /home/t79/vyrdon/consolelab/scripts/update-team-room.mjs
+

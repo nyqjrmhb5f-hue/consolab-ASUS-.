@@ -1,0 +1,42 @@
+{
+  "updated_at": "2026-04-02",
+  "source": "codex_session",
+  "connector_mode": "real_mcp_connectors",
+  "connectors": [
+    {
+      "id": "adobe_photoshop",
+      "provider": "Adobe Photoshop",
+      "kind": "app_connector",
+      "status": "available_in_session",
+      "access_mode": "tool_search"
+    },
+    {
+      "id": "canva",
+      "provider": "Canva",
+      "kind": "app_connector",
+      "status": "available_in_session",
+      "access_mode": "tool_search"
+    },
+    {
+      "id": "figma",
+      "provider": "Figma",
+      "kind": "app_connector",
+      "status": "available_in_session",
+      "access_mode": "tool_search"
+    },
+    {
+      "id": "github",
+      "provider": "GitHub",
+      "kind": "app_connector",
+      "status": "available_in_session",
+      "access_mode": "tool_search"
+    },
+    {
+      "id": "lovable",
+      "provider": "Lovable",
+      "kind": "app_connector",
+      "status": "available_in_session",
+      "access_mode": "tool_search"
+    }
+  ]
+}

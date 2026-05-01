@@ -1,0 +1,37 @@
+{
+  "tracking_id": "20260403T091338319Z-fc48599c",
+  "action": "read_gateway_status",
+  "target": null,
+  "details": {},
+  "requested_by": "codex",
+  "source": "operator_console",
+  "channel": "gateway_api",
+  "risk": "standard",
+  "command_class": "standard",
+  "approvals_required": [],
+  "approval_scopes": [],
+  "pending_approval_scopes": [],
+  "approved_scopes": [],
+  "proof_contract_version": "proof-refs.v1",
+  "policy_version": "command-classes.v1",
+  "policy": {
+    "evidence_level": "sealed_trace",
+    "execution_timeout_ms": 15000,
+    "rollback_required": false,
+    "tunnel_required": false,
+    "approval_scopes": []
+  },
+  "idempotency_key": "proof-v1-sealed-001",
+  "correlation_id": "proof-v1-sealed-001",
+  "received_at": "2026-04-03T09:13:38.319Z",
+  "status": "active",
+  "control_state": "accepted",
+  "lifecycle_state": "dispatched",
+  "command_hash": "f0ba587b57dc3348bff56d305c37c6e37043118570617850390d714ad2c76998",
+  "evidence_state": "pending_write",
+  "dispatch_state": {
+    "status": "active",
+    "started_at": "2026-04-03T09:13:38.346Z",
+    "dispatched_by": "gateway_api"
+  }
+}

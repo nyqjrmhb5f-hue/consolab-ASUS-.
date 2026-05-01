@@ -1,0 +1,84 @@
+{
+  "correlation_id": "proof-sealed-002",
+  "tracking_id": "20260403T091205915Z-7e894143",
+  "idempotency_key": "proof-sealed-002",
+  "action": "read_chronos",
+  "status": "completed",
+  "control_state": "sealed",
+  "created_at": "2026-04-03T09:12:05.916Z",
+  "approval_scopes": [],
+  "pending_approval_scopes": [],
+  "approved_scopes": [],
+  "dispatch_state": {
+    "status": "completed",
+    "started_at": "2026-04-03T09:12:05.942Z",
+    "dispatched_by": "gateway_api",
+    "completed_at": "2026-04-03T09:12:05.950Z"
+  },
+  "evidence_state": "sealed",
+  "execution_ref": {
+    "ref_kind": "execution",
+    "lane": "runtime",
+    "created_at": "2026-04-03T09:12:05.951Z",
+    "file_path": "/home/t79/vyrdon/consolelab/03_OPERATIONS_ROOM/evidence_refs/runtime/20260403T091205915Z-7e894143.execution.json",
+    "consolelab_path": "03_OPERATIONS_ROOM/evidence_refs/runtime/20260403T091205915Z-7e894143.execution.json"
+  },
+  "result": {
+    "kind": "chronos_timeline",
+    "timeline": {
+      "timestamp": "2026-04-03T09:12:05.950Z",
+      "engine": "CHRONOS",
+      "source": "/home/t79/vyrdon/consolelab/05_CENTRAL_BRAIN/orchestration/calendar/chronos_schedule.json",
+      "items": [
+        {
+          "id": "room_state_refresh",
+          "label": "Room State Refresh",
+          "type": "interval_minutes",
+          "interval_minutes": 30,
+          "target_room": "05_CENTRAL_BRAIN",
+          "next_occurs_at_utc": "2026-04-03T09:30:00.000Z",
+          "countdown": "00:17:54",
+          "countdown_seconds": 1074
+        },
+        {
+          "id": "evidence_snapshot_hourly",
+          "label": "Evidence Snapshot",
+          "type": "interval_minutes",
+          "interval_minutes": 60,
+          "target_room": "04_EVIDENCE_ROOM",
+          "next_occurs_at_utc": "2026-04-03T10:00:00.000Z",
+          "countdown": "00:47:54",
+          "countdown_seconds": 2874
+        },
+        {
+          "id": "daily_commercial_report",
+          "label": "Daily Commercial Report",
+          "type": "daily_utc",
+          "time_utc": "13:00",
+          "target_room": "02_COMMERCIAL_ROOM",
+          "next_occurs_at_utc": "2026-04-03T13:00:00.000Z",
+          "countdown": "03:47:54",
+          "countdown_seconds": 13674
+        },
+        {
+          "id": "daily_deployment_window",
+          "label": "Deployment Window Review",
+          "type": "daily_utc",
+          "time_utc": "17:00",
+          "target_room": "09_DEPLOYMENT",
+          "next_occurs_at_utc": "2026-04-03T17:00:00.000Z",
+          "countdown": "07:47:54",
+          "countdown_seconds": 28074
+        }
+      ]
+    }
+  },
+  "evidence_ref": {
+    "ref_kind": "sealed",
+    "lane": "runtime",
+    "created_at": "2026-04-03T09:12:05.960Z",
+    "file_path": "/home/t79/vyrdon/consolelab/03_OPERATIONS_ROOM/evidence_refs/runtime/20260403T091205915Z-7e894143.sealed.json",
+    "consolelab_path": "03_OPERATIONS_ROOM/evidence_refs/runtime/20260403T091205915Z-7e894143.sealed.json"
+  },
+  "attestation_state": "pending_key_configuration"
+}

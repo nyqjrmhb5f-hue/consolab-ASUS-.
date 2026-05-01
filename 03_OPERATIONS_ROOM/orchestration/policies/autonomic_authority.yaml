@@ -1,0 +1,16 @@
+mode: hybrid
+automatic_actions:
+  - move_jobs_to_blocked_or_retry
+  - dead_letter_toxic_payloads
+  - open_incident_triage_records
+  - trigger_feature_gates
+  - fail_over_healthy_services
+  - scale_workers_within_limits
+manual_key_turn_required:
+  - full_system_shutdown
+  - global_payment_freeze
+  - destructive_rollback
+  - key_rotation
+  - production_cutover
+  - deletion_or_archive_mutation
+evidence_required: true

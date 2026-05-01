@@ -1,0 +1,64 @@
+{
+  "tracking_id": "20260403T081614284Z-41ec3c58",
+  "action": "deploy_feature_gate",
+  "target": "03_OPERATIONS_ROOM",
+  "details": {
+    "gate_id": "withdrawals",
+    "enabled": false,
+    "simulate_failure": true
+  },
+  "requested_by": "verification-rollback",
+  "source": "operator_console",
+  "channel": "gateway_api",
+  "risk": "high",
+  "command_class": "runtime_mutation",
+  "approvals_required": [
+    "executive"
+  ],
+  "policy_version": "command-classes.v1",
+  "policy": {
+    "evidence_level": "attested",
+    "execution_timeout_ms": 60000,
+    "rollback_required": true,
+    "tunnel_required": false,
+    "approval_scopes": [
+      "executive"
+    ]
+  },
+  "idempotency_key": "demo-deploy-gate-rollback-003",
+  "correlation_id": "corr-deploy-gate-rollback-003",
+  "received_at": "2026-04-03T08:16:14.285Z",
+  "status": "rolled_back",
+  "control_state": "rejected",
+  "lifecycle_state": "rolled_back",
+  "command_hash": "2be5ec9152b18114dac7fb2ccdb882017bf5959366129ae8bbaabfd750ecf6ab",
+  "approval_state": {
+    "executive": {
+      "status": "approved",
+      "approved_by": "verification-rollback",
+      "approved_at": "2026-04-03T08:16:14.392Z",
+      "note": ""
+    }
+  },
+  "evidence_state": "rollback_recorded",
+  "dispatch_state": {
+    "status": "failed",
+    "started_at": "2026-04-03T08:16:14.402Z",
+    "approved_by": "verification-rollback",
+    "approval_scope": "executive",
+    "completed_at": "2026-04-03T08:16:14.408Z",
+    "error": "feature_gate_verification_failed"
+  },
+  "rollback_state": {
+    "status": "rolled_back",
+    "rolled_back_at": "2026-04-03T08:16:14.419Z",
+    "reason": "feature_gate_verification_failed",
+    "gate_id": "withdrawals",
+    "artifact": "/home/t79/vyrdon/consolelab/09_DEPLOYMENT/rollback/20260403T081614284Z-41ec3c58.json"
+  },
+  "result": {
+    "kind": "feature_gate_rolled_back",
+    "gate_id": "withdrawals",
+    "restored": false
+  }
+}

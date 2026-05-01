@@ -1,0 +1,9 @@
+{
+  "tracking_id": "20260403T042509415Z-e969e1fa",
+  "action": "close_remote_tunnel",
+  "status": "closed",
+  "target": "ops-node-01",
+  "closed_at": "2026-04-03T04:41:15.789Z",
+  "closed_by": "verification-run",
+  "close_reason": "close_path_verification"
+}

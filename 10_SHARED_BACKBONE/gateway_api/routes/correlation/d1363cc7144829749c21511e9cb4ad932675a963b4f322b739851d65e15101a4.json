@@ -1,0 +1,9 @@
+{
+  "correlation_id": "proof-rollback-001",
+  "tracking_id": "20260403T091110117Z-b2550db5",
+  "idempotency_key": "proof-rollback-001",
+  "action": "deploy_feature_gate",
+  "status": "pending_approval",
+  "control_state": "pending_approval",
+  "created_at": "2026-04-03T09:11:10.117Z"
+}

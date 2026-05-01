@@ -1,0 +1,11 @@
+{
+  "id": "receipt-global-vyrdon-receipt",
+  "type": "receipt",
+  "market": "global",
+  "name": "vyrdon-receipt",
+  "issued_at": "2026-04-28T20:55:22.919Z",
+  "status": "VALID",
+  "evidence_hash": "35b552dcc3fef5bd2d11e826158837dccbbeab63b437a37a6eb361b234084a32",
+  "verify_url": "https://vyrdx.vyrdon.com/verify/35b552dcc3fef5bd2d11e826158837dccbbeab63b437a37a6eb361b234084a32",
+  "artifact_hash": "35b552dcc3fef5bd2d11e826158837dccbbeab63b437a37a6eb361b234084a32"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "flyer-dubai-control",
+  "type": "flyer",
+  "market": "dubai",
+  "name": "control",
+  "issued_at": "2026-04-28T20:55:22.907Z",
+  "status": "VALID",
+  "evidence_hash": "6320f6562bc9280deb786d0ceacdc8c96fd5cb60158cd06d53f8669d343c739a",
+  "verify_url": "https://vyrdx.vyrdon.com/verify/6320f6562bc9280deb786d0ceacdc8c96fd5cb60158cd06d53f8669d343c739a",
+  "artifact_hash": "6320f6562bc9280deb786d0ceacdc8c96fd5cb60158cd06d53f8669d343c739a"
+}

@@ -1,0 +1,18 @@
+strategy: hybrid
+blue_green:
+  rooms:
+    - 05_CENTRAL_BRAIN
+    - 03_OPERATIONS_ROOM
+    - 07_INTELLIGENCE_TUNNEL
+    - 10_SHARED_BACKBONE
+canary:
+  rooms:
+    - 06_INTERFACES
+requires_executive_approval_for:
+  - core_brain
+  - evidence_path
+  - payment_flows
+rollback_triggers:
+  - failed_healthcheck
+  - evidence_integrity_regression
+  - tunnel_instability

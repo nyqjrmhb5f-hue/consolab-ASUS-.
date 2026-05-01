@@ -1,0 +1,11 @@
+{
+  "id": "flyer-usa-challenge",
+  "type": "flyer",
+  "market": "usa",
+  "name": "challenge",
+  "issued_at": "2026-04-28T20:42:25.675Z",
+  "status": "VALID",
+  "evidence_hash": "f0f496b28535dc4d5f28f7b028b314b64f6637febc90fe54239ff6e6d8c8b925",
+  "verify_url": "https://vyrdx.vyrdon.com/verify/f0f496b28535dc4d5f28f7b028b314b64f6637febc90fe54239ff6e6d8c8b925",
+  "artifact_hash": "f0f496b28535dc4d5f28f7b028b314b64f6637febc90fe54239ff6e6d8c8b925"
+}

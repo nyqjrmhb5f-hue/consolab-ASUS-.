@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VYRDON RECEIPT</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #f9f9f9; color: #111; font-family: 'Courier New', monospace; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; }
+  .receipt { max-width: 500px; width: 100%; background: #fff; border: 1px solid #ddd; padding: 2rem; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+  .receipt-header { text-align: center; border-bottom: 2px dashed #111; padding-bottom: 1rem; margin-bottom: 1rem; }
+  .receipt-header h1 { font-size: 1.4rem; font-weight: 900; letter-spacing: 0.2em; }
+  .receipt-header p { font-size: 0.75rem; color: #555; margin: 0.2rem 0; }
+  .receipt-row { display: flex; justify-content: space-between; padding: 0.3rem 0; font-size: 0.85rem; border-bottom: 1px dotted #ddd; }
+  .receipt-row.total { border-bottom: 2px solid #111; border-top: 2px solid #111; font-weight: bold; font-size: 0.9rem; padding: 0.5rem 0; margin: 0.5rem 0; }
+  .receipt-row.status { color: #1a7a4a; font-weight: bold; }
+  .hash-section { margin: 1rem 0; padding: 0.5rem; background: #f0f0f0; border: 1px solid #ddd; }
+  .hash-section label { font-size: 0.65rem; color: #999; display: block; text-transform: uppercase; }
+  .hash-section span { font-size: 0.6rem; word-break: break-all; color: #333; }
+  .footer { text-align: center; margin-top: 1rem; padding-top: 1rem; border-top: 2px dashed #111; font-size: 0.7rem; color: #888; }
+  .contact-block { margin-top: 1rem; text-align: left; font-size: 0.65rem; color: #999; border-top: 1px dashed #ddd; padding-top: 0.5rem; }
+  .contact-block p { margin: 0.1rem 0; }
+  .contact-block a { color: #111; text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="receipt">
+  <div class="receipt-header">
+    <h1>VYRDON CONSOLAB</h1>
+    <p>VALIDATION RECEIPT</p>
+    <p>RCPT-MOI14UIG</p>
+    <p>2026-04-28T02:51:23.127Z</p>
+  </div>
+  <div class="receipt-row"><span>Service</span><span>CONSOLAB Media Engine</span></div>
+  <div class="receipt-row"><span>Market</span><span>USA</span></div>
+  <div class="receipt-row"><span>Validation Type</span><span>FULL SYSTEM CHECK</span></div>
+  <div class="receipt-row"><span>Authority</span><span>VYRDON CONSOLAB</span></div>
+  <div class="receipt-row"><span>Artifacts Generated</span><span>STAMP + CERT + RECEIPT</span></div>
+  <div class="receipt-row total status"><span>STATUS</span><span>&#10003; VALID — ACCEPTED</span></div>
+  <div class="hash-section">
+    <label>Evidence Hash</label>
+    <span>75e26eacd433028f9f9510cfc7913e2f13a21a75607373dd4c4ad1b4fc0800bd</span>
+  </div>
+  <div class="hash-section">
+    <label>Verify URL</label>
+    <span><a href="https://vyrdx.vyrdon.com/verify/75e26eacd433028f9f9510cfc7913e2f13a21a75607373dd4c4ad1b4fc0800bd">https://vyrdx.vyrdon.com/verify/75e26eacd433028f9f9510cfc7913e2f13a21a75607373dd4c4ad1b4fc0800bd</a></span>
+  </div>
+  <div class="footer">
+    <p>VYRDON CONSOLAB — Certification Engine</p>
+    <p>This receipt is cryptographically hashed and tamper-evident.</p>
+  </div>
+  
+<div class="contact-block">
+  <p><strong>Website:</strong> <a href="https://vyrdx.vyrdon.com">https://vyrdx.vyrdon.com</a></p>
+  <p><strong>Main:</strong> <a href="https://vyrdon.com">https://vyrdon.com</a></p>
+  <p><strong>GitHub:</strong> <a href="https://github.com/teee79A/Anchor-Stack">https://github.com/teee79A/Anchor-Stack</a></p>
+  <p><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/vyrdon-llc">https://www.linkedin.com/in/vyrdon-llc</a></p>
+  <p><strong>X:</strong> <a href="https://x.com/vyrdon">https://x.com/vyrdon</a></p>
+  <p><strong>Email:</strong> <a href="mailto:contact@vyrdon.com">contact@vyrdon.com</a></p>
+  <p><strong>License:</strong> Apache-2.0 + Commercial terms available</p>
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,6 @@
+{
+  "tracking_id": "20260403T091209633Z-96491823",
+  "gate_id": "withdrawals",
+  "rolled_back_at": "2026-04-03T09:12:12.469Z",
+  "failure_reason": "feature_gate_verification_failed"
+}

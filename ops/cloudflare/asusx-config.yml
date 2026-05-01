@@ -1,0 +1,20 @@
+tunnel: vyrdon-asusx-authority
+credentials-file: /etc/cloudflared/creds/asusx-tunnel.json
+
+ingress:
+  - hostname: attest.asusx.vyrdon.com
+    service: http://127.0.0.1:9101
+    originRequest:
+      connectTimeout: 5s
+      noTLSVerify: true
+
+  - hostname: sign.asusx.vyrdon.com
+    service: http://127.0.0.1:9102
+    originRequest:
+      connectTimeout: 5s
+      noTLSVerify: true
+
+  - hostname: ssh.asusx.vyrdon.com
+    service: ssh://127.0.0.1:22
+
+  - service: http_status:404

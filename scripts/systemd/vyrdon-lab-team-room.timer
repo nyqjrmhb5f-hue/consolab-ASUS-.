@@ -1,0 +1,11 @@
+[Unit]
+Description=VYRDON Lab Console - Daily Team Room update
+
+[Timer]
+OnCalendar=daily
+Persistent=true
+RandomizedDelaySec=10m
+
+[Install]
+WantedBy=timers.target
+

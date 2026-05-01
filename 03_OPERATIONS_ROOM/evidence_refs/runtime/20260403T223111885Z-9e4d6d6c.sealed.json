@@ -1,0 +1,45 @@
+{
+  "tracking_id": "20260403T223111885Z-9e4d6d6c",
+  "action": "read_chronos",
+  "command_class": "standard",
+  "lifecycle_state": "sealed",
+  "evidence": {
+    "recorded_at": "2026-04-03T22:31:11.902Z",
+    "baseline_ref": {
+      "file_path": "ops/baselines/evidence/events.jsonl",
+      "consolelab_path": "ops/baselines/evidence/events.jsonl",
+      "format": "jsonl"
+    },
+    "room_ref": {
+      "event_id": "20260403T223111902Z-717b5b385bfc3a20",
+      "tx_hash": "717b5b385bfc3a204e422313fa909e7780b07455827e5a5ac63b6c367b0e90e6",
+      "hash_algorithm": "sha256",
+      "attestation_state": "signed",
+      "verification_state": "verified",
+      "signing_key_id": "test-ed25519",
+      "key_type": "ed25519",
+      "recorded_at": "2026-04-03T22:31:11.902Z",
+      "artifact_paths": {
+        "runtime_journals": "04_EVIDENCE_ROOM/runtime_journals/events.jsonl",
+        "tx_hashes": "04_EVIDENCE_ROOM/tx_hashes/events.jsonl",
+        "actions": "04_EVIDENCE_ROOM/actions/events.jsonl",
+        "audit_trails": "04_EVIDENCE_ROOM/audit_trails/events.jsonl",
+        "signer_events": "04_EVIDENCE_ROOM/signer_events/events.jsonl",
+        "attestations": "04_EVIDENCE_ROOM/attestations/events.jsonl"
+      }
+    }
+  },
+  "targets": {
+    "executed_job": "03_OPERATIONS_ROOM/jobs/executed/20260403T223111885Z-9e4d6d6c.json",
+    "completed_job": "03_OPERATIONS_ROOM/jobs/completed/20260403T223111885Z-9e4d6d6c.json",
+    "executed_action": "03_OPERATIONS_ROOM/actions/executed/20260403T223111885Z-9e4d6d6c.json",
+    "gateway_session": "10_SHARED_BACKBONE/agent_gateway/sessions/20260403T223111885Z-9e4d6d6c.json"
+  },
+  "detail": {
+    "approval_scope": null,
+    "dispatched_by": "gateway_api"
+  },
+  "created_at": "2026-04-03T22:31:11.904Z",
+  "ref_kind": "sealed",
+  "lane": "runtime"
+}

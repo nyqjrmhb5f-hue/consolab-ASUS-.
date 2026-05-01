@@ -1,0 +1,69 @@
+{
+  "tracking_id": "20260403T041649985Z-83c58b5c",
+  "action": "read_chronos",
+  "target": null,
+  "details": {},
+  "requested_by": "codex",
+  "source": "operator_console",
+  "channel": "gateway_api",
+  "risk": "standard",
+  "approvals_required": [],
+  "received_at": "2026-04-03T04:16:49.986Z",
+  "status": "completed",
+  "dispatch_state": {
+    "status": "completed",
+    "started_at": "2026-04-03T04:16:49.995Z",
+    "dispatched_by": "gateway_api",
+    "completed_at": "2026-04-03T04:16:50.005Z"
+  },
+  "result": {
+    "kind": "chronos_timeline",
+    "timeline": {
+      "timestamp": "2026-04-03T04:16:50.004Z",
+      "engine": "CHRONOS",
+      "source": "/home/t79/consolelab/05_CENTRAL_BRAIN/orchestration/calendar/chronos_schedule.json",
+      "items": [
+        {
+          "id": "room_state_refresh",
+          "label": "Room State Refresh",
+          "type": "interval_minutes",
+          "interval_minutes": 30,
+          "target_room": "05_CENTRAL_BRAIN",
+          "next_occurs_at_utc": "2026-04-03T04:30:00.000Z",
+          "countdown": "00:13:09",
+          "countdown_seconds": 789
+        },
+        {
+          "id": "evidence_snapshot_hourly",
+          "label": "Evidence Snapshot",
+          "type": "interval_minutes",
+          "interval_minutes": 60,
+          "target_room": "04_EVIDENCE_ROOM",
+          "next_occurs_at_utc": "2026-04-03T05:00:00.000Z",
+          "countdown": "00:43:09",
+          "countdown_seconds": 2589
+        },
+        {
+          "id": "daily_commercial_report",
+          "label": "Daily Commercial Report",
+          "type": "daily_utc",
+          "time_utc": "13:00",
+          "target_room": "02_COMMERCIAL_ROOM",
+          "next_occurs_at_utc": "2026-04-03T13:00:00.000Z",
+          "countdown": "08:43:09",
+          "countdown_seconds": 31389
+        },
+        {
+          "id": "daily_deployment_window",
+          "label": "Deployment Window Review",
+          "type": "daily_utc",
+          "time_utc": "17:00",
+          "target_room": "09_DEPLOYMENT",
+          "next_occurs_at_utc": "2026-04-03T17:00:00.000Z",
+          "countdown": "12:43:09",
+          "countdown_seconds": 45789
+        }
+      ]
+    }
+  }
+}

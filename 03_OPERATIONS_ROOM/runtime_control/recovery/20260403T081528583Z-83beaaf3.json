@@ -1,0 +1,15 @@
+{
+  "tracking_id": "20260403T081528583Z-83beaaf3",
+  "gate_id": "withdrawals",
+  "created_at": "2026-04-03T08:15:28.646Z",
+  "previous_state": null,
+  "attempted_state": {
+    "gate_id": "withdrawals",
+    "enabled": false,
+    "status": "applied",
+    "source_tracking_id": "20260403T081528583Z-83beaaf3",
+    "updated_at": "2026-04-03T08:15:28.646Z",
+    "previous_enabled": null,
+    "source_command_class": "runtime_mutation"
+  }
+}

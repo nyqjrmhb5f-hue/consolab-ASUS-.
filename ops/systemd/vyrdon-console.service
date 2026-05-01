@@ -1,0 +1,18 @@
+[Unit]
+Description=VYRDON Lab Console (DELL runtime)
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+WorkingDirectory=/home/t79/vyrdon/consolelab
+ExecStart=/usr/bin/docker compose -f /home/t79/vyrdon/consolelab/docker-compose.yml up -d --build
+ExecStop=/usr/bin/docker compose -f /home/t79/vyrdon/consolelab/docker-compose.yml down
+TimeoutStartSec=0
+User=t79
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

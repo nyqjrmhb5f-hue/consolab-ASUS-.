@@ -1,0 +1,18 @@
+{
+  "tracking_id": "20260403T042509379Z-989f6a84",
+  "action": "read_gateway_status",
+  "target": "10_SHARED_BACKBONE",
+  "details": {},
+  "requested_by": "verification-run",
+  "source": "operator_console",
+  "channel": "gateway_api",
+  "risk": "standard",
+  "approvals_required": [],
+  "received_at": "2026-04-03T04:25:09.379Z",
+  "status": "active",
+  "dispatch_state": {
+    "status": "active",
+    "started_at": "2026-04-03T04:25:09.383Z",
+    "dispatched_by": "gateway_api"
+  }
+}

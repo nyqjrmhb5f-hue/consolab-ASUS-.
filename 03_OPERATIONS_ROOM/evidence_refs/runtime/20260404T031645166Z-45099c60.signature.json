@@ -1,0 +1,24 @@
+{
+  "tracking_id": "20260404T031645166Z-45099c60",
+  "action": "read_chronos",
+  "command_class": "standard",
+  "lifecycle_state": "sealed",
+  "signature": {
+    "event_id": "20260404T031645185Z-9a652751e63e1878",
+    "tx_hash": "9a652751e63e1878a78d3d495740ac8782fd97b29939f4376431507683e028bf",
+    "signing_key_id": "asusx-key-2026-03-12T044315558Z-f60a1f89",
+    "attestation_state": "signed",
+    "verification_state": "verified",
+    "key_type": "ed25519"
+  },
+  "targets": {
+    "attestation_log": "04_EVIDENCE_ROOM/attestations/events.jsonl",
+    "signer_events": "04_EVIDENCE_ROOM/signer_events/events.jsonl"
+  },
+  "detail": {
+    "approval_scope": null
+  },
+  "created_at": "2026-04-04T03:16:45.189Z",
+  "ref_kind": "signature",
+  "lane": "runtime"
+}

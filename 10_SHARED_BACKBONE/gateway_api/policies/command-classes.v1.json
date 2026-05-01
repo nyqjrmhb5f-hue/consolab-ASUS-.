@@ -1,0 +1,80 @@
+{
+  "version": "command-classes.v1",
+  "default_class": "standard",
+  "classes": {
+    "standard": {
+      "risk": "standard",
+      "approval_scopes": [],
+      "tunnel_required": false,
+      "evidence_level": "sealed_trace",
+      "execution_timeout_ms": 15000,
+      "rollback_required": false
+    },
+    "sensitive": {
+      "risk": "sensitive",
+      "approval_scopes": [],
+      "tunnel_required": false,
+      "evidence_level": "sealed_trace",
+      "execution_timeout_ms": 20000,
+      "rollback_required": false
+    },
+    "high_risk": {
+      "risk": "high",
+      "approval_scopes": ["executive"],
+      "tunnel_required": false,
+      "evidence_level": "attested",
+      "execution_timeout_ms": 30000,
+      "rollback_required": true
+    },
+    "tunnel": {
+      "risk": "high",
+      "approval_scopes": ["executive", "tunnel"],
+      "tunnel_required": true,
+      "evidence_level": "attested",
+      "execution_timeout_ms": 45000,
+      "rollback_required": true
+    },
+    "runtime_mutation": {
+      "risk": "high",
+      "approval_scopes": ["executive"],
+      "tunnel_required": false,
+      "evidence_level": "attested",
+      "execution_timeout_ms": 60000,
+      "rollback_required": true
+    },
+    "evidence_only": {
+      "risk": "standard",
+      "approval_scopes": [],
+      "tunnel_required": false,
+      "evidence_level": "sealed_only",
+      "execution_timeout_ms": 10000,
+      "rollback_required": false
+    }
+  },
+  "classification_order": [
+    {
+      "command_class": "tunnel",
+      "fragments": ["tunnel", "ssh", "remote", "session", "relay"]
+    },
+    {
+      "command_class": "runtime_mutation",
+      "fragments": ["deploy", "release", "rollback", "cutover", "promote"]
+    },
+    {
+      "command_class": "high_risk",
+      "fragments": ["payout", "transfer", "withdraw", "delete", "rotate"]
+    },
+    {
+      "command_class": "sensitive",
+      "fragments": ["refund", "invoice", "finance", "account", "contract", "subscription"]
+    },
+    {
+      "command_class": "evidence_only",
+      "fragments": ["evidence", "attest", "proof", "snapshot", "verify_hash", "verify_evidence"]
+    },
+    {
+      "command_class": "standard",
+      "fragments": ["read_", "refresh_", "status", "chronos", "gateway"]
+    }
+  ]
+}

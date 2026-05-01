@@ -1,0 +1,11 @@
+[Unit]
+Description=VYRDON Attestation Sync (DELL -> ASUSX)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/curl -fsS http://127.0.0.1:3001/api/asusx/status
+User=t79
+NoNewPrivileges=true
+PrivateTmp=true

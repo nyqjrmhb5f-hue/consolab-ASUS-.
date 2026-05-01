@@ -1,0 +1,45 @@
+{
+  "tracking_id": "20260404T031704942Z-bf211e0c",
+  "action": "read_chronos",
+  "command_class": "standard",
+  "lifecycle_state": "sealed",
+  "evidence": {
+    "recorded_at": "2026-04-04T03:17:04.960Z",
+    "baseline_ref": {
+      "file_path": "ops/baselines/evidence/events.jsonl",
+      "consolelab_path": "ops/baselines/evidence/events.jsonl",
+      "format": "jsonl"
+    },
+    "room_ref": {
+      "event_id": "20260404T031704960Z-12a996c9add21484",
+      "tx_hash": "12a996c9add2148483859d63df4f06af83768a4d93a089c3e087069bcf01e162",
+      "hash_algorithm": "sha256",
+      "attestation_state": "sign_error",
+      "verification_state": null,
+      "signing_key_id": "asusx-key-2026-03-12T044315558Z-f60a1f89",
+      "key_type": null,
+      "recorded_at": "2026-04-04T03:17:04.960Z",
+      "artifact_paths": {
+        "runtime_journals": "04_EVIDENCE_ROOM/runtime_journals/events.jsonl",
+        "tx_hashes": "04_EVIDENCE_ROOM/tx_hashes/events.jsonl",
+        "actions": "04_EVIDENCE_ROOM/actions/events.jsonl",
+        "audit_trails": "04_EVIDENCE_ROOM/audit_trails/events.jsonl",
+        "signer_events": "04_EVIDENCE_ROOM/signer_events/events.jsonl",
+        "attestations": null
+      }
+    }
+  },
+  "targets": {
+    "executed_job": "03_OPERATIONS_ROOM/jobs/executed/20260404T031704942Z-bf211e0c.json",
+    "completed_job": "03_OPERATIONS_ROOM/jobs/completed/20260404T031704942Z-bf211e0c.json",
+    "executed_action": "03_OPERATIONS_ROOM/actions/executed/20260404T031704942Z-bf211e0c.json",
+    "gateway_session": "10_SHARED_BACKBONE/agent_gateway/sessions/20260404T031704942Z-bf211e0c.json"
+  },
+  "detail": {
+    "approval_scope": null,
+    "dispatched_by": "gateway_api"
+  },
+  "created_at": "2026-04-04T03:17:04.961Z",
+  "ref_kind": "sealed",
+  "lane": "runtime"
+}

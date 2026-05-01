@@ -1,0 +1,26 @@
+{
+  "tracking_id": "20260403T091209633Z-96491823",
+  "action": "deploy_feature_gate",
+  "command_class": "runtime_mutation",
+  "lifecycle_state": "rolled_back",
+  "rollback_state": {
+    "status": "rolled_back",
+    "rolled_back_at": "2026-04-03T09:12:12.469Z",
+    "reason": "feature_gate_verification_failed",
+    "gate_id": "withdrawals",
+    "artifact": "09_DEPLOYMENT/rollback/20260403T091209633Z-96491823.json"
+  },
+  "targets": {
+    "rollback_artifact": "09_DEPLOYMENT/rollback/20260403T091209633Z-96491823.json",
+    "pipeline_rollback": "03_OPERATIONS_ROOM/pipelines/rollback/20260403T091209633Z-96491823.json",
+    "rollback_job": "03_OPERATIONS_ROOM/jobs/rolled_back/20260403T091209633Z-96491823.json",
+    "rollback_action": "03_OPERATIONS_ROOM/actions/rolled_back/20260403T091209633Z-96491823.json"
+  },
+  "detail": {
+    "rollback_type": "feature_gate",
+    "removed_gate": true
+  },
+  "created_at": "2026-04-03T09:12:12.470Z",
+  "ref_kind": "rollback",
+  "lane": "recovery"
+}

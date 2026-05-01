@@ -1,0 +1,215 @@
+{
+  "system": {
+    "name": "ConsoleLab",
+    "cockpit": "kitty",
+    "brain_shell": "zsh",
+    "updated_at": "2026-04-02"
+  },
+  "rooms": [
+    {
+      "id": "01_EXECUTIVE",
+      "title": "Executive",
+      "primary_engine": "APEX-CONTROL",
+      "path": "/home/t79/consolelab/01_EXECUTIVE",
+      "role": "Governance, mission, approvals, and oversight.",
+      "state": "structured"
+    },
+    {
+      "id": "02_COMMERCIAL_ROOM",
+      "title": "Commercial Room",
+      "primary_engine": "REVENUE-NEXUS",
+      "path": "/home/t79/consolelab/02_COMMERCIAL_ROOM",
+      "role": "Pricing, contracts, subscriptions, revenue, and promotions.",
+      "state": "structured"
+    },
+    {
+      "id": "03_OPERATIONS_ROOM",
+      "title": "Operations Room",
+      "primary_engine": "OPS-MATRIX",
+      "path": "/home/t79/consolelab/03_OPERATIONS_ROOM",
+      "role": "Jobs, queues, incidents, scaling, and runtime control.",
+      "state": "structured"
+    },
+    {
+      "id": "04_EVIDENCE_ROOM",
+      "title": "Evidence Room",
+      "primary_engine": "LEDGERD",
+      "path": "/home/t79/consolelab/04_EVIDENCE_ROOM",
+      "role": "Hashes, attestations, proofs, snapshots, and audit trails.",
+      "state": "structured"
+    },
+    {
+      "id": "05_CENTRAL_BRAIN",
+      "title": "Central Brain",
+      "primary_engine": "CORE-PRIME",
+      "path": "/home/t79/consolelab/05_CENTRAL_BRAIN",
+      "role": "Reasoning, policy loading, orchestration, memory, and connectors.",
+      "state": "structured"
+    },
+    {
+      "id": "06_INTERFACES",
+      "title": "Interfaces",
+      "primary_engine": "OMNI-SURFACE",
+      "path": "/home/t79/consolelab/06_INTERFACES",
+      "role": "Operator, customer, codex, schema, and sensory surfaces.",
+      "state": "structured"
+    },
+    {
+      "id": "07_INTELLIGENCE_TUNNEL",
+      "title": "Intelligence Tunnel",
+      "primary_engine": "SYNAPSE-BRIDGE",
+      "path": "/home/t79/consolelab/07_INTELLIGENCE_TUNNEL",
+      "role": "Zero-trust SSH, relay, feed, and remote-control transport.",
+      "state": "structured"
+    },
+    {
+      "id": "09_DEPLOYMENT",
+      "title": "Deployment",
+      "primary_engine": "LAUNCH-VECTOR",
+      "path": "/home/t79/consolelab/09_DEPLOYMENT",
+      "role": "Manifests, release mutation, healthchecks, and rollback.",
+      "state": "structured"
+    },
+    {
+      "id": "10_SHARED_BACKBONE",
+      "title": "Shared Backbone",
+      "primary_engine": "GATEWAY-API",
+      "path": "/home/t79/consolelab/10_SHARED_BACKBONE",
+      "role": "Gateway ingress, server runtime, and agent brokering.",
+      "state": "structured"
+    }
+  ],
+  "engines": [
+    {
+      "id": "APEX-CONTROL",
+      "room_id": "01_EXECUTIVE",
+      "path": "/home/t79/consolelab/01_EXECUTIVE/control",
+      "role": "Governance and strategy core."
+    },
+    {
+      "id": "REVENUE-NEXUS",
+      "room_id": "02_COMMERCIAL_ROOM",
+      "path": "/home/t79/consolelab/02_COMMERCIAL_ROOM/dashboard",
+      "role": "Growth and monetization core."
+    },
+    {
+      "id": "PROMO-ARC",
+      "room_id": "02_COMMERCIAL_ROOM",
+      "path": "/home/t79/consolelab/02_COMMERCIAL_ROOM/promotions",
+      "role": "Promotion, reward, offer, and campaign core."
+    },
+    {
+      "id": "OPS-MATRIX",
+      "room_id": "03_OPERATIONS_ROOM",
+      "path": "/home/t79/consolelab/03_OPERATIONS_ROOM/orchestration",
+      "role": "Operational processing and dispatch core."
+    },
+    {
+      "id": "LEDGERD",
+      "room_id": "05_CENTRAL_BRAIN",
+      "serves_room_id": "04_EVIDENCE_ROOM",
+      "path": "/home/t79/consolelab/05_CENTRAL_BRAIN/integrations/ledger",
+      "role": "Evidence hashing, attestation, and snapshot engine."
+    },
+    {
+      "id": "CORE-PRIME",
+      "room_id": "05_CENTRAL_BRAIN",
+      "path": "/home/t79/consolelab/05_CENTRAL_BRAIN/core/CORE-PRIME",
+      "role": "Central operations and reasoning engine."
+    },
+    {
+      "id": "SENTINEL",
+      "room_id": "05_CENTRAL_BRAIN",
+      "path": "/home/t79/consolelab/05_CENTRAL_BRAIN/telemetry",
+      "role": "Anomaly detection and intelligence engine."
+    },
+    {
+      "id": "BALANCE",
+      "room_id": "05_CENTRAL_BRAIN",
+      "path": "/home/t79/consolelab/05_CENTRAL_BRAIN/commands/accounting",
+      "role": "Accounting execution engine."
+    },
+    {
+      "id": "TREASURY",
+      "room_id": "05_CENTRAL_BRAIN",
+      "path": "/home/t79/consolelab/05_CENTRAL_BRAIN/commands/finance",
+      "role": "Finance execution engine."
+    },
+    {
+      "id": "CHRONOS",
+      "room_id": "05_CENTRAL_BRAIN",
+      "path": "/home/t79/consolelab/05_CENTRAL_BRAIN/orchestration/calendar",
+      "role": "Calendar and cadence engine."
+    },
+    {
+      "id": "MCP-BRAIN",
+      "room_id": "05_CENTRAL_BRAIN",
+      "path": "/home/t79/consolelab/05_CENTRAL_BRAIN/integrations/mcp_brain",
+      "role": "Real connector and MCP routing fabric."
+    },
+    {
+      "id": "MEMORY",
+      "room_id": "05_CENTRAL_BRAIN",
+      "path": "/home/t79/consolelab/05_CENTRAL_BRAIN/core/memory",
+      "role": "Persistent session and semantic memory."
+    },
+    {
+      "id": "RAG",
+      "room_id": "05_CENTRAL_BRAIN",
+      "path": "/home/t79/consolelab/05_CENTRAL_BRAIN/core/rag",
+      "role": "Retrieval-augmented knowledge engine."
+    },
+    {
+      "id": "OMNI-SURFACE",
+      "room_id": "06_INTERFACES",
+      "path": "/home/t79/consolelab/06_INTERFACES",
+      "role": "Interaction translation and presentation core."
+    },
+    {
+      "id": "SYNAPSE-BRIDGE",
+      "room_id": "07_INTELLIGENCE_TUNNEL",
+      "path": "/home/t79/consolelab/07_INTELLIGENCE_TUNNEL",
+      "role": "Secure telemetry and remote-control fabric."
+    },
+    {
+      "id": "LAUNCH-VECTOR",
+      "room_id": "09_DEPLOYMENT",
+      "path": "/home/t79/consolelab/09_DEPLOYMENT",
+      "role": "Delivery and evolution core."
+    },
+    {
+      "id": "GATEWAY-API",
+      "room_id": "10_SHARED_BACKBONE",
+      "path": "/home/t79/consolelab/10_SHARED_BACKBONE/gateway_api",
+      "role": "Main ingress, auth, routing, and API versioning."
+    },
+    {
+      "id": "SERVER",
+      "room_id": "10_SHARED_BACKBONE",
+      "path": "/home/t79/consolelab/10_SHARED_BACKBONE/server",
+      "role": "Runtime host, sockets, transport, and health."
+    },
+    {
+      "id": "AGENT-GATEWAY",
+      "room_id": "10_SHARED_BACKBONE",
+      "path": "/home/t79/consolelab/10_SHARED_BACKBONE/agent_gateway",
+      "role": "Agent broker for interfaces, tools, and tunnel-aware actions."
+    }
+  ],
+  "links": [
+    ["01_EXECUTIVE", "05_CENTRAL_BRAIN"],
+    ["01_EXECUTIVE", "09_DEPLOYMENT"],
+    ["02_COMMERCIAL_ROOM", "05_CENTRAL_BRAIN"],
+    ["02_COMMERCIAL_ROOM", "04_EVIDENCE_ROOM"],
+    ["03_OPERATIONS_ROOM", "04_EVIDENCE_ROOM"],
+    ["05_CENTRAL_BRAIN", "03_OPERATIONS_ROOM"],
+    ["05_CENTRAL_BRAIN", "04_EVIDENCE_ROOM"],
+    ["05_CENTRAL_BRAIN", "07_INTELLIGENCE_TUNNEL"],
+    ["06_INTERFACES", "10_SHARED_BACKBONE"],
+    ["07_INTELLIGENCE_TUNNEL", "05_CENTRAL_BRAIN"],
+    ["09_DEPLOYMENT", "03_OPERATIONS_ROOM"],
+    ["09_DEPLOYMENT", "04_EVIDENCE_ROOM"],
+    ["10_SHARED_BACKBONE", "05_CENTRAL_BRAIN"],
+    ["10_SHARED_BACKBONE", "07_INTELLIGENCE_TUNNEL"]
+  ]
+}

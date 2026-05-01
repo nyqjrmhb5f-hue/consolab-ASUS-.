@@ -1,0 +1,31 @@
+{
+  "tracking_id": "20260403T055518156Z-0eb326fe",
+  "action": "read_gateway_status",
+  "target": "10_SHARED_BACKBONE",
+  "details": {},
+  "requested_by": "verification-hardening",
+  "source": "operator_console",
+  "channel": "gateway_api",
+  "risk": "standard",
+  "command_class": "standard",
+  "approvals_required": [],
+  "policy_version": "command-classes.v1",
+  "policy": {
+    "evidence_level": "sealed_trace",
+    "execution_timeout_ms": 15000,
+    "rollback_required": false,
+    "tunnel_required": false,
+    "approval_scopes": []
+  },
+  "idempotency_key": "demo-read-gateway-001",
+  "correlation_id": "corr-demo-001",
+  "received_at": "2026-04-03T05:55:18.156Z",
+  "status": "active",
+  "control_state": "accepted",
+  "command_hash": "1c2d2a8fc8ba6641e2fa2f93d5d28d50bf9ac6dc77943ae6717dd57770550916",
+  "dispatch_state": {
+    "status": "active",
+    "started_at": "2026-04-03T05:55:18.167Z",
+    "dispatched_by": "gateway_api"
+  }
+}

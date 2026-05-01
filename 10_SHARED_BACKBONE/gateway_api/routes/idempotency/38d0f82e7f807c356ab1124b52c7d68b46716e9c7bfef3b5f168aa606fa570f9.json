@@ -1,0 +1,62 @@
+{
+  "idempotency_key": "proof-rollback-002",
+  "tracking_id": "20260403T091209633Z-96491823",
+  "correlation_id": "proof-rollback-002",
+  "command_hash": "c7448266bef9e023b626eb0d90b6b38123b5d60b71c3460b54b785287e44fac7",
+  "action": "deploy_feature_gate",
+  "status": "rolled_back",
+  "control_state": "rejected",
+  "created_at": "2026-04-03T09:12:09.633Z",
+  "approval_state": {
+    "executive": {
+      "status": "approved",
+      "approved_by": "codex",
+      "approved_at": "2026-04-03T09:12:12.447Z",
+      "note": "proof check"
+    }
+  },
+  "approval_scopes": [
+    "executive"
+  ],
+  "pending_approval_scopes": [],
+  "approved_scopes": [
+    "executive"
+  ],
+  "approval_ref": {
+    "ref_kind": "approval.executive",
+    "lane": "runtime",
+    "created_at": "2026-04-03T09:12:12.450Z",
+    "file_path": "/home/t79/vyrdon/consolelab/03_OPERATIONS_ROOM/evidence_refs/runtime/20260403T091209633Z-96491823.approval.executive.json",
+    "consolelab_path": "03_OPERATIONS_ROOM/evidence_refs/runtime/20260403T091209633Z-96491823.approval.executive.json"
+  },
+  "approval_refs": {
+    "executive": {
+      "ref_kind": "approval.executive",
+      "lane": "runtime",
+      "created_at": "2026-04-03T09:12:12.450Z",
+      "file_path": "/home/t79/vyrdon/consolelab/03_OPERATIONS_ROOM/evidence_refs/runtime/20260403T091209633Z-96491823.approval.executive.json",
+      "consolelab_path": "03_OPERATIONS_ROOM/evidence_refs/runtime/20260403T091209633Z-96491823.approval.executive.json"
+    }
+  },
+  "dispatch_state": {
+    "status": "failed",
+    "started_at": "2026-04-03T09:12:12.458Z",
+    "approved_by": "codex",
+    "approval_scope": "executive",
+    "completed_at": "2026-04-03T09:12:12.463Z",
+    "error": "feature_gate_verification_failed"
+  },
+  "evidence_state": "rollback_recorded",
+  "rollback_ref": {
+    "ref_kind": "rollback",
+    "lane": "recovery",
+    "created_at": "2026-04-03T09:12:12.470Z",
+    "file_path": "/home/t79/vyrdon/consolelab/03_OPERATIONS_ROOM/evidence_refs/recovery/20260403T091209633Z-96491823.rollback.json",
+    "consolelab_path": "03_OPERATIONS_ROOM/evidence_refs/recovery/20260403T091209633Z-96491823.rollback.json"
+  },
+  "result": {
+    "kind": "feature_gate_rolled_back",
+    "gate_id": "withdrawals",
+    "restored": false
+  }
+}

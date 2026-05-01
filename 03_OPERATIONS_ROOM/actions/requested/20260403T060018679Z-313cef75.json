@@ -1,0 +1,26 @@
+{
+  "tracking_id": "20260403T060018679Z-313cef75",
+  "action": "read_gateway_status",
+  "target": null,
+  "details": {},
+  "requested_by": "verification-hardening",
+  "source": "operator_console",
+  "channel": "gateway_api",
+  "risk": "standard",
+  "command_class": "standard",
+  "approvals_required": [],
+  "policy_version": "command-classes.v1",
+  "policy": {
+    "evidence_level": "sealed_trace",
+    "execution_timeout_ms": 15000,
+    "rollback_required": false,
+    "tunnel_required": false,
+    "approval_scopes": []
+  },
+  "idempotency_key": "demo-read-gateway-003",
+  "correlation_id": "corr-demo-003",
+  "received_at": "2026-04-03T06:00:18.679Z",
+  "status": "accepted",
+  "control_state": "accepted",
+  "command_hash": "439725cb84739c39a11d86405eb3bc6a27209648e5c10b02da1cc75fc4786901"
+}

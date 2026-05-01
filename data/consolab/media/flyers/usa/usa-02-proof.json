@@ -1,0 +1,17 @@
+{
+  "market": "usa",
+  "id": "02",
+  "name": "proof",
+  "title": "WE DON'T TRUST YOUR SYSTEM.",
+  "lines": [
+    "WE DON'T TRUST YOUR SYSTEM.",
+    "We verify it.",
+    "ALL TRUE → ACCEPT",
+    "ANY FALSE → REJECT",
+    "RUN YOUR FIRST VALIDATION — FREE"
+  ],
+  "evidence_hash": "69071b8b38d4419e6f431534dd4540fe5bd321f7a7efadd6f0d4016d355838bf",
+  "issued_at": "2026-04-28T02:51:23.124Z",
+  "status": "VALID",
+  "verify_url": "https://vyrdx.vyrdon.com/verify/69071b8b38d4419e6f431534dd4540fe5bd321f7a7efadd6f0d4016d355838bf"
+}

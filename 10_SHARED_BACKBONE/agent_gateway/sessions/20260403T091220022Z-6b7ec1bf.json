@@ -1,0 +1,44 @@
+{
+  "tracking_id": "20260403T091220022Z-6b7ec1bf",
+  "action": "open_remote_tunnel",
+  "target": null,
+  "details": {
+    "target": "ops-node-1"
+  },
+  "requested_by": "codex",
+  "source": "operator_console",
+  "channel": "gateway_api",
+  "risk": "high",
+  "command_class": "tunnel",
+  "approvals_required": [
+    "executive",
+    "tunnel"
+  ],
+  "approval_scopes": [
+    "executive",
+    "tunnel"
+  ],
+  "pending_approval_scopes": [
+    "executive",
+    "tunnel"
+  ],
+  "approved_scopes": [],
+  "policy_version": "command-classes.v1",
+  "policy": {
+    "evidence_level": "attested",
+    "execution_timeout_ms": 45000,
+    "rollback_required": true,
+    "tunnel_required": true,
+    "approval_scopes": [
+      "executive",
+      "tunnel"
+    ]
+  },
+  "idempotency_key": "proof-pending-002",
+  "correlation_id": "proof-pending-002",
+  "received_at": "2026-04-03T09:12:20.022Z",
+  "status": "pending_approval",
+  "control_state": "pending_approval",
+  "lifecycle_state": "pending_approval",
+  "command_hash": "65cc5c9aa57b286825217a67db8a7554c22467753c935d711831622a1dafe37a"
+}

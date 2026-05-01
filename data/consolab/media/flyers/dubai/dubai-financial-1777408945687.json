@@ -1,0 +1,11 @@
+{
+  "id": "flyer-dubai-financial",
+  "type": "flyer",
+  "market": "dubai",
+  "name": "financial",
+  "issued_at": "2026-04-28T20:42:25.687Z",
+  "status": "VALID",
+  "evidence_hash": "00a74b94ae9b7bd9a210eb8840d86ea8b6efd47c4fe1d801fdff875af4a6afeb",
+  "verify_url": "https://vyrdx.vyrdon.com/verify/00a74b94ae9b7bd9a210eb8840d86ea8b6efd47c4fe1d801fdff875af4a6afeb",
+  "artifact_hash": "00a74b94ae9b7bd9a210eb8840d86ea8b6efd47c4fe1d801fdff875af4a6afeb"
+}

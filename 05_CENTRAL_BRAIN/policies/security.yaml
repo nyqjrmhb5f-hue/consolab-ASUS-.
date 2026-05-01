@@ -1,0 +1,12 @@
+mode: locked
+cockpit: kitty
+brain_shell: zsh
+rules:
+  - id: two_key_financial_limit
+    statement: No transaction over 10000 USD without a two-key signature.
+  - id: zero_trust_tunnel_auth
+    statement: All remote-control and tunnel traffic must be authenticated on every hop.
+  - id: interfaces_cannot_execute
+    statement: Interfaces may translate or render intent but may not execute actions without CORE-PRIME approval.
+  - id: connector_identity_only
+    statement: Prefer real connector sessions and signed identities over raw API keys.

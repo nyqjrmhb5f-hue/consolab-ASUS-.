@@ -1,0 +1,25 @@
+{
+  "tracking_id": "20260403T042509415Z-e969e1fa",
+  "action": "open_remote_tunnel",
+  "target": "07_INTELLIGENCE_TUNNEL",
+  "details": {
+    "target": "ops-node-01",
+    "purpose": "verification"
+  },
+  "requested_by": "verification-run",
+  "source": "operator_console",
+  "channel": "gateway_api",
+  "risk": "high",
+  "approvals_required": [
+    "executive",
+    "tunnel"
+  ],
+  "received_at": "2026-04-03T04:25:09.415Z",
+  "status": "pending_approval",
+  "session_state": {
+    "status": "closed",
+    "closed_at": "2026-04-03T04:41:15.789Z",
+    "closed_by": "verification-run",
+    "close_reason": "close_path_verification"
+  }
+}

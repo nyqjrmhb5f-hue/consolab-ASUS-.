@@ -1,0 +1,11 @@
+{
+  "id": "flyer-usa-proof",
+  "type": "flyer",
+  "market": "usa",
+  "name": "proof",
+  "issued_at": "2026-04-28T20:42:25.679Z",
+  "status": "VALID",
+  "evidence_hash": "d775675dc8928bf315c817ae716f38d94acc53c717a23209fda3ddd673787a75",
+  "verify_url": "https://vyrdx.vyrdon.com/verify/d775675dc8928bf315c817ae716f38d94acc53c717a23209fda3ddd673787a75",
+  "artifact_hash": "d775675dc8928bf315c817ae716f38d94acc53c717a23209fda3ddd673787a75"
+}

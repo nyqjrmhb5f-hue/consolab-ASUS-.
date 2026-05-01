@@ -1,0 +1,85 @@
+{
+  "correlation_id": "asus-fail-001",
+  "tracking_id": "20260404T031128796Z-9fa639e8",
+  "idempotency_key": "asus-fail-001",
+  "action": "read_chronos",
+  "status": "completed",
+  "control_state": "sealed",
+  "created_at": "2026-04-04T03:11:28.797Z",
+  "approval_scopes": [],
+  "pending_approval_scopes": [],
+  "approved_scopes": [],
+  "proof_contract_version": "proof-refs.v1",
+  "dispatch_state": {
+    "status": "completed",
+    "started_at": "2026-04-04T03:11:28.815Z",
+    "dispatched_by": "gateway_api",
+    "completed_at": "2026-04-04T03:11:28.821Z"
+  },
+  "evidence_state": "sealed",
+  "execution_ref": {
+    "ref_kind": "execution",
+    "lane": "runtime",
+    "created_at": "2026-04-04T03:11:28.821Z",
+    "file_path": "/home/t79/vyrdon/consolelab/03_OPERATIONS_ROOM/evidence_refs/runtime/20260404T031128796Z-9fa639e8.execution.json",
+    "consolelab_path": "03_OPERATIONS_ROOM/evidence_refs/runtime/20260404T031128796Z-9fa639e8.execution.json"
+  },
+  "result": {
+    "kind": "chronos_timeline",
+    "timeline": {
+      "timestamp": "2026-04-04T03:11:28.820Z",
+      "engine": "CHRONOS",
+      "source": "/home/t79/vyrdon/consolelab/05_CENTRAL_BRAIN/orchestration/calendar/chronos_schedule.json",
+      "items": [
+        {
+          "id": "room_state_refresh",
+          "label": "Room State Refresh",
+          "type": "interval_minutes",
+          "interval_minutes": 30,
+          "target_room": "05_CENTRAL_BRAIN",
+          "next_occurs_at_utc": "2026-04-04T03:30:00.000Z",
+          "countdown": "00:18:31",
+          "countdown_seconds": 1111
+        },
+        {
+          "id": "evidence_snapshot_hourly",
+          "label": "Evidence Snapshot",
+          "type": "interval_minutes",
+          "interval_minutes": 60,
+          "target_room": "04_EVIDENCE_ROOM",
+          "next_occurs_at_utc": "2026-04-04T04:00:00.000Z",
+          "countdown": "00:48:31",
+          "countdown_seconds": 2911
+        },
+        {
+          "id": "daily_commercial_report",
+          "label": "Daily Commercial Report",
+          "type": "daily_utc",
+          "time_utc": "13:00",
+          "target_room": "02_COMMERCIAL_ROOM",
+          "next_occurs_at_utc": "2026-04-04T13:00:00.000Z",
+          "countdown": "09:48:31",
+          "countdown_seconds": 35311
+        },
+        {
+          "id": "daily_deployment_window",
+          "label": "Deployment Window Review",
+          "type": "daily_utc",
+          "time_utc": "17:00",
+          "target_room": "09_DEPLOYMENT",
+          "next_occurs_at_utc": "2026-04-04T17:00:00.000Z",
+          "countdown": "13:48:31",
+          "countdown_seconds": 49711
+        }
+      ]
+    }
+  },
+  "evidence_ref": {
+    "ref_kind": "sealed",
+    "lane": "runtime",
+    "created_at": "2026-04-04T03:11:28.838Z",
+    "file_path": "/home/t79/vyrdon/consolelab/03_OPERATIONS_ROOM/evidence_refs/runtime/20260404T031128796Z-9fa639e8.sealed.json",
+    "consolelab_path": "03_OPERATIONS_ROOM/evidence_refs/runtime/20260404T031128796Z-9fa639e8.sealed.json"
+  },
+  "attestation_state": "sign_error"
+}

@@ -1,0 +1,9 @@
+{
+  "correlation_id": "corr-demo-001",
+  "tracking_id": "20260403T055518156Z-0eb326fe",
+  "idempotency_key": "demo-read-gateway-001",
+  "action": "read_gateway_status",
+  "status": "accepted",
+  "control_state": "accepted",
+  "created_at": "2026-04-03T05:55:18.156Z"
+}

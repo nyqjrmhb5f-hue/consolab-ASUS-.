@@ -1,0 +1,11 @@
+{
+  "tracking_id": "20260403T081528583Z-83beaaf3",
+  "action": "deploy_feature_gate",
+  "rollback_type": "feature_gate",
+  "gate_id": "withdrawals",
+  "rolled_back_at": "2026-04-03T08:15:28.652Z",
+  "failure_reason": "feature_gate_verification_failed",
+  "previous_state": null,
+  "restored_state": null,
+  "removed_gate": true
+}

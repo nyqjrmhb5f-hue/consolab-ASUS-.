@@ -1,0 +1,11 @@
+{
+  "id": "flyer-usa-conversion",
+  "type": "flyer",
+  "market": "usa",
+  "name": "conversion",
+  "issued_at": "2026-04-28T20:55:22.895Z",
+  "status": "VALID",
+  "evidence_hash": "416813162bb16ab9feaa7704753d9921f3be9ce13f7b0e38890bee1ae3abd4ed",
+  "verify_url": "https://vyrdx.vyrdon.com/verify/416813162bb16ab9feaa7704753d9921f3be9ce13f7b0e38890bee1ae3abd4ed",
+  "artifact_hash": "416813162bb16ab9feaa7704753d9921f3be9ce13f7b0e38890bee1ae3abd4ed"
+}

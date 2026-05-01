@@ -1,0 +1,10 @@
+{
+  "idempotency_key": "proof-sealed-001",
+  "tracking_id": "20260403T091110122Z-34b470fb",
+  "correlation_id": "proof-sealed-001",
+  "command_hash": "f7ba61a0bca00c8d9a0cd303deeba4c2aed547be653e32c5cd9fe2ccdd9ae158",
+  "action": "read_chronos",
+  "status": "accepted",
+  "control_state": "accepted",
+  "created_at": "2026-04-03T09:11:10.122Z"
+}

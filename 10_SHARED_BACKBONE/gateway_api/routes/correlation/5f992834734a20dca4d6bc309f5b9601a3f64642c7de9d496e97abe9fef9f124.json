@@ -1,0 +1,9 @@
+{
+  "correlation_id": "proof-sealed-001",
+  "tracking_id": "20260403T091110122Z-34b470fb",
+  "idempotency_key": "proof-sealed-001",
+  "action": "read_chronos",
+  "status": "accepted",
+  "control_state": "accepted",
+  "created_at": "2026-04-03T09:11:10.122Z"
+}

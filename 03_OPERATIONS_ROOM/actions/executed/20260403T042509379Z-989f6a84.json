@@ -1,0 +1,85 @@
+{
+  "tracking_id": "20260403T042509379Z-989f6a84",
+  "action": "read_gateway_status",
+  "target": "10_SHARED_BACKBONE",
+  "details": {},
+  "requested_by": "verification-run",
+  "source": "operator_console",
+  "channel": "gateway_api",
+  "risk": "standard",
+  "approvals_required": [],
+  "received_at": "2026-04-03T04:25:09.379Z",
+  "status": "completed",
+  "dispatch_state": {
+    "status": "completed",
+    "started_at": "2026-04-03T04:25:09.383Z",
+    "dispatched_by": "gateway_api",
+    "completed_at": "2026-04-03T04:25:09.385Z"
+  },
+  "result": {
+    "kind": "gateway_status",
+    "status": {
+      "timestamp": "2026-04-03T04:25:09.385Z",
+      "service": "GATEWAY-API",
+      "status": "UP",
+      "schema": "command-envelope.v1",
+      "queues": {
+        "intake": 2,
+        "executive_approvals": 1,
+        "tunnel_approvals": 1,
+        "agent_sessions": 5
+      }
+    },
+    "feed": {
+      "timestamp": "2026-04-03T04:25:09.385Z",
+      "service": "GATEWAY-API",
+      "items": [
+        {
+          "tracking_id": "20260403T042509379Z-989f6a84",
+          "action": "read_gateway_status",
+          "status": "accepted",
+          "risk": "standard",
+          "requested_by": "verification-run",
+          "source": "operator_console",
+          "received_at": "2026-04-03T04:25:09.379Z"
+        },
+        {
+          "tracking_id": "20260403T041649988Z-e3294e4e",
+          "action": "open_remote_tunnel",
+          "status": "pending_approval",
+          "risk": "high",
+          "requested_by": "codex",
+          "source": "operator_console",
+          "received_at": "2026-04-03T04:16:49.988Z"
+        },
+        {
+          "tracking_id": "20260403T041649985Z-83c58b5c",
+          "action": "read_chronos",
+          "status": "accepted",
+          "risk": "standard",
+          "requested_by": "codex",
+          "source": "operator_console",
+          "received_at": "2026-04-03T04:16:49.986Z"
+        },
+        {
+          "tracking_id": "20260403T035323494Z-9daa2f24",
+          "action": "refresh_room_state",
+          "status": "accepted",
+          "risk": "standard",
+          "requested_by": "codex",
+          "source": "operator_console",
+          "received_at": "2026-04-03T03:53:23.494Z"
+        },
+        {
+          "tracking_id": "20260403T035323491Z-28c6e683",
+          "action": "open_remote_tunnel",
+          "status": "pending_approval",
+          "risk": "high",
+          "requested_by": "codex",
+          "source": "operator_console",
+          "received_at": "2026-04-03T03:53:23.491Z"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "tracking_id": "20260404T031704942Z-bf211e0c",
+  "action": "read_chronos",
+  "target": null,
+  "details": {
+    "scope": "asus_gate_fail"
+  },
+  "requested_by": "codex",
+  "source": "operator_console",
+  "channel": "gateway_api",
+  "risk": "standard",
+  "command_class": "standard",
+  "approvals_required": [],
+  "approval_scopes": [],
+  "pending_approval_scopes": [],
+  "approved_scopes": [],
+  "proof_contract_version": "proof-refs.v1",
+  "policy_version": "command-classes.v1",
+  "policy": {
+    "evidence_level": "sealed_trace",
+    "execution_timeout_ms": 15000,
+    "rollback_required": false,
+    "tunnel_required": false,
+    "approval_scopes": []
+  },
+  "idempotency_key": "asus-final-fail-001",
+  "correlation_id": "0b31746c-505b-489b-b534-ca1b2470b2ff",
+  "received_at": "2026-04-04T03:17:04.942Z",
+  "status": "failed",
+  "control_state": "rejected",
+  "lifecycle_state": "failed",
+  "command_hash": "4829cdc7450774ed48f0381232a1d51c219bcee39b2a0461f26d91ae7ed1bdfb",
+  "evidence_state": "attestation_failed",
+  "dispatch_state": {
+    "status": "completed",
+    "started_at": "2026-04-04T03:17:04.952Z",
+    "dispatched_by": "gateway_api",
+    "completed_at": "2026-04-04T03:17:04.955Z"
+  },
+  "execution_ref": {
+    "ref_kind": "execution",
+    "lane": "runtime",
+    "created_at": "2026-04-04T03:17:04.956Z",
+    "file_path": "/home/t79/vyrdon/consolelab/03_OPERATIONS_ROOM/evidence_refs/runtime/20260404T031704942Z-bf211e0c.execution.json",
+    "consolelab_path": "03_OPERATIONS_ROOM/evidence_refs/runtime/20260404T031704942Z-bf211e0c.execution.json"
+  },
+  "result": {
+    "kind": "chronos_timeline",
+    "timeline": {
+      "timestamp": "2026-04-04T03:17:04.955Z",
+      "engine": "CHRONOS",
+      "source": "/home/t79/vyrdon/consolelab/05_CENTRAL_BRAIN/orchestration/calendar/chronos_schedule.json",
+      "items": [
+        {
+          "id": "room_state_refresh",
+          "label": "Room State Refresh",
+          "type": "interval_minutes",
+          "interval_minutes": 30,
+          "target_room": "05_CENTRAL_BRAIN",
+          "next_occurs_at_utc": "2026-04-04T03:30:00.000Z",
+          "countdown": "00:12:55",
+          "countdown_seconds": 775
+        },
+        {
+          "id": "evidence_snapshot_hourly",
+          "label": "Evidence Snapshot",
+          "type": "interval_minutes",
+          "interval_minutes": 60,
+          "target_room": "04_EVIDENCE_ROOM",
+          "next_occurs_at_utc": "2026-04-04T04:00:00.000Z",
+          "countdown": "00:42:55",
+          "countdown_seconds": 2575
+        },
+        {
+          "id": "daily_commercial_report",
+          "label": "Daily Commercial Report",
+          "type": "daily_utc",
+          "time_utc": "13:00",
+          "target_room": "02_COMMERCIAL_ROOM",
+          "next_occurs_at_utc": "2026-04-04T13:00:00.000Z",
+          "countdown": "09:42:55",
+          "countdown_seconds": 34975
+        },
+        {
+          "id": "daily_deployment_window",
+          "label": "Deployment Window Review",
+          "type": "daily_utc",
+          "time_utc": "17:00",
+          "target_room": "09_DEPLOYMENT",
+          "next_occurs_at_utc": "2026-04-04T17:00:00.000Z",
+          "countdown": "13:42:55",
+          "countdown_seconds": 49375
+        }
+      ]
+    }
+  },
+  "evidence_ref": {
+    "ref_kind": "sealed",
+    "lane": "runtime",
+    "created_at": "2026-04-04T03:17:04.961Z",
+    "file_path": "/home/t79/vyrdon/consolelab/03_OPERATIONS_ROOM/evidence_refs/runtime/20260404T031704942Z-bf211e0c.sealed.json",
+    "consolelab_path": "03_OPERATIONS_ROOM/evidence_refs/runtime/20260404T031704942Z-bf211e0c.sealed.json"
+  },
+  "attestation_state": "sign_error",
+  "failure_state": {
+    "status": "failed",
+    "failed_at": "2026-04-04T03:17:04.963Z",
+    "failed_by": "gateway_api",
+    "reason": "attestation_required_failed",
+    "detail": {
+      "evidence_component": "ops_matrix",
+      "evidence_action": "command.execute",
+      "verification_state": null,
+      "signing_key_id": "asusx-key-2026-03-12T044315558Z-f60a1f89"
+    }
+  }
+}

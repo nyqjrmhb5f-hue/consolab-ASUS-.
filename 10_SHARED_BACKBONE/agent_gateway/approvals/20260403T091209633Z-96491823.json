@@ -1,0 +1,66 @@
+{
+  "tracking_id": "20260403T091209633Z-96491823",
+  "action": "deploy_feature_gate",
+  "target": null,
+  "details": {
+    "gate_id": "withdrawals",
+    "enabled": false,
+    "simulate_failure": true
+  },
+  "requested_by": "codex",
+  "source": "operator_console",
+  "channel": "gateway_api",
+  "risk": "high",
+  "command_class": "runtime_mutation",
+  "approvals_required": [
+    "executive"
+  ],
+  "approval_scopes": [
+    "executive"
+  ],
+  "pending_approval_scopes": [],
+  "approved_scopes": [
+    "executive"
+  ],
+  "policy_version": "command-classes.v1",
+  "policy": {
+    "evidence_level": "attested",
+    "execution_timeout_ms": 60000,
+    "rollback_required": true,
+    "tunnel_required": false,
+    "approval_scopes": [
+      "executive"
+    ]
+  },
+  "idempotency_key": "proof-rollback-002",
+  "correlation_id": "proof-rollback-002",
+  "received_at": "2026-04-03T09:12:09.633Z",
+  "status": "approved",
+  "control_state": "accepted",
+  "lifecycle_state": "approved",
+  "command_hash": "c7448266bef9e023b626eb0d90b6b38123b5d60b71c3460b54b785287e44fac7",
+  "approval_state": {
+    "executive": {
+      "status": "approved",
+      "approved_by": "codex",
+      "approved_at": "2026-04-03T09:12:12.447Z",
+      "note": "proof check"
+    }
+  },
+  "approval_ref": {
+    "ref_kind": "approval.executive",
+    "lane": "runtime",
+    "created_at": "2026-04-03T09:12:12.450Z",
+    "file_path": "/home/t79/vyrdon/consolelab/03_OPERATIONS_ROOM/evidence_refs/runtime/20260403T091209633Z-96491823.approval.executive.json",
+    "consolelab_path": "03_OPERATIONS_ROOM/evidence_refs/runtime/20260403T091209633Z-96491823.approval.executive.json"
+  },
+  "approval_refs": {
+    "executive": {
+      "ref_kind": "approval.executive",
+      "lane": "runtime",
+      "created_at": "2026-04-03T09:12:12.450Z",
+      "file_path": "/home/t79/vyrdon/consolelab/03_OPERATIONS_ROOM/evidence_refs/runtime/20260403T091209633Z-96491823.approval.executive.json",
+      "consolelab_path": "03_OPERATIONS_ROOM/evidence_refs/runtime/20260403T091209633Z-96491823.approval.executive.json"
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "tracking_id": "20260403T081614284Z-41ec3c58",
+  "action": "deploy_feature_gate",
+  "target": "03_OPERATIONS_ROOM",
+  "details": {
+    "gate_id": "withdrawals",
+    "enabled": false,
+    "simulate_failure": true
+  },
+  "requested_by": "verification-rollback",
+  "source": "operator_console",
+  "channel": "gateway_api",
+  "risk": "high",
+  "command_class": "runtime_mutation",
+  "approvals_required": [
+    "executive"
+  ],
+  "policy_version": "command-classes.v1",
+  "policy": {
+    "evidence_level": "attested",
+    "execution_timeout_ms": 60000,
+    "rollback_required": true,
+    "tunnel_required": false,
+    "approval_scopes": [
+      "executive"
+    ]
+  },
+  "idempotency_key": "demo-deploy-gate-rollback-003",
+  "correlation_id": "corr-deploy-gate-rollback-003",
+  "received_at": "2026-04-03T08:16:14.285Z",
+  "status": "pending_approval",
+  "control_state": "pending_approval",
+  "lifecycle_state": "pending_approval",
+  "command_hash": "2be5ec9152b18114dac7fb2ccdb882017bf5959366129ae8bbaabfd750ecf6ab"
+}

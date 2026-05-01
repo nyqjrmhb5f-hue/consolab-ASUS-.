@@ -1,0 +1,20 @@
+{
+  "tracking_id": "20260403T091338330Z-e2c42d8a",
+  "action": "read_chronos",
+  "command_class": "standard",
+  "lifecycle_state": "executed",
+  "result_kind": "chronos_timeline",
+  "targets": {
+    "executed_job": "03_OPERATIONS_ROOM/jobs/executed/20260403T091338330Z-e2c42d8a.json",
+    "completed_job": "03_OPERATIONS_ROOM/jobs/completed/20260403T091338330Z-e2c42d8a.json",
+    "executed_action": "03_OPERATIONS_ROOM/actions/executed/20260403T091338330Z-e2c42d8a.json",
+    "gateway_session": "10_SHARED_BACKBONE/agent_gateway/sessions/20260403T091338330Z-e2c42d8a.json"
+  },
+  "detail": {
+    "dispatched_by": "gateway_api",
+    "completed_at": "2026-04-03T09:13:38.376Z"
+  },
+  "created_at": "2026-04-03T09:13:38.376Z",
+  "ref_kind": "execution",
+  "lane": "runtime"
+}

@@ -1,0 +1,220 @@
+{
+  "correlation_id": "corr-demo-004",
+  "tracking_id": "20260403T064451814Z-a252d9f7",
+  "idempotency_key": "demo-read-gateway-004",
+  "action": "read_gateway_status",
+  "status": "completed",
+  "control_state": "sealed",
+  "created_at": "2026-04-03T06:44:51.815Z",
+  "dispatch_state": {
+    "status": "completed",
+    "started_at": "2026-04-03T06:44:51.835Z",
+    "dispatched_by": "gateway_api",
+    "completed_at": "2026-04-03T06:44:51.848Z"
+  },
+  "evidence_state": "sealed",
+  "result": {
+    "kind": "gateway_status",
+    "status": {
+      "timestamp": "2026-04-03T06:44:51.848Z",
+      "service": "GATEWAY-API",
+      "status": "UP",
+      "schema": "command-envelope.v1",
+      "queues": {
+        "intake": 2,
+        "executive_approvals": 1,
+        "tunnel_approvals": 1,
+        "agent_sessions": 11
+      }
+    },
+    "feed": {
+      "timestamp": "2026-04-03T06:44:51.844Z",
+      "service": "AGENT-GATEWAY",
+      "lane": "intake",
+      "items": [
+        {
+          "timestamp": "2026-04-03T06:44:51.820Z",
+          "lane": "intake",
+          "event_kind": "command.staged",
+          "lifecycle_state": "staged",
+          "tracking_id": "20260403T064451814Z-a252d9f7",
+          "correlation_id": "corr-demo-004",
+          "idempotency_key": "demo-read-gateway-004",
+          "command_hash": "c99544939e311acc3092f758b18b5a873d26111c6400c5710479408ce9c307e1",
+          "action": "read_gateway_status",
+          "target": null,
+          "command_class": "standard",
+          "risk": "standard",
+          "status": "accepted",
+          "control_state": "accepted",
+          "evidence_state": null,
+          "requested_by": "verification-projector",
+          "source": "operator_console",
+          "approvals_required": [],
+          "result": null,
+          "detail": {
+            "approval_scopes": []
+          }
+        },
+        {
+          "timestamp": "2026-04-03T06:44:51.819Z",
+          "lane": "intake",
+          "event_kind": "command.validated",
+          "lifecycle_state": "validated",
+          "tracking_id": "20260403T064451814Z-a252d9f7",
+          "correlation_id": "corr-demo-004",
+          "idempotency_key": "demo-read-gateway-004",
+          "command_hash": "c99544939e311acc3092f758b18b5a873d26111c6400c5710479408ce9c307e1",
+          "action": "read_gateway_status",
+          "target": null,
+          "command_class": "standard",
+          "risk": "standard",
+          "status": "accepted",
+          "control_state": "accepted",
+          "evidence_state": null,
+          "requested_by": "verification-projector",
+          "source": "operator_console",
+          "approvals_required": [],
+          "result": null,
+          "detail": {
+            "policy_version": "command-classes.v1"
+          }
+        },
+        {
+          "timestamp": "2026-04-03T06:44:51.819Z",
+          "lane": "intake",
+          "event_kind": "command.received",
+          "lifecycle_state": "received",
+          "tracking_id": "20260403T064451814Z-a252d9f7",
+          "correlation_id": "corr-demo-004",
+          "idempotency_key": "demo-read-gateway-004",
+          "command_hash": "c99544939e311acc3092f758b18b5a873d26111c6400c5710479408ce9c307e1",
+          "action": "read_gateway_status",
+          "target": null,
+          "command_class": "standard",
+          "risk": "standard",
+          "status": "accepted",
+          "control_state": "accepted",
+          "evidence_state": null,
+          "requested_by": "verification-projector",
+          "source": "operator_console",
+          "approvals_required": [],
+          "result": null,
+          "detail": {
+            "channel": "gateway_api"
+          }
+        }
+      ]
+    },
+    "intake_feed": {
+      "timestamp": "2026-04-03T06:44:51.844Z",
+      "service": "AGENT-GATEWAY",
+      "lane": "intake",
+      "items": [
+        {
+          "timestamp": "2026-04-03T06:44:51.820Z",
+          "lane": "intake",
+          "event_kind": "command.staged",
+          "lifecycle_state": "staged",
+          "tracking_id": "20260403T064451814Z-a252d9f7",
+          "correlation_id": "corr-demo-004",
+          "idempotency_key": "demo-read-gateway-004",
+          "command_hash": "c99544939e311acc3092f758b18b5a873d26111c6400c5710479408ce9c307e1",
+          "action": "read_gateway_status",
+          "target": null,
+          "command_class": "standard",
+          "risk": "standard",
+          "status": "accepted",
+          "control_state": "accepted",
+          "evidence_state": null,
+          "requested_by": "verification-projector",
+          "source": "operator_console",
+          "approvals_required": [],
+          "result": null,
+          "detail": {
+            "approval_scopes": []
+          }
+        },
+        {
+          "timestamp": "2026-04-03T06:44:51.819Z",
+          "lane": "intake",
+          "event_kind": "command.validated",
+          "lifecycle_state": "validated",
+          "tracking_id": "20260403T064451814Z-a252d9f7",
+          "correlation_id": "corr-demo-004",
+          "idempotency_key": "demo-read-gateway-004",
+          "command_hash": "c99544939e311acc3092f758b18b5a873d26111c6400c5710479408ce9c307e1",
+          "action": "read_gateway_status",
+          "target": null,
+          "command_class": "standard",
+          "risk": "standard",
+          "status": "accepted",
+          "control_state": "accepted",
+          "evidence_state": null,
+          "requested_by": "verification-projector",
+          "source": "operator_console",
+          "approvals_required": [],
+          "result": null,
+          "detail": {
+            "policy_version": "command-classes.v1"
+          }
+        },
+        {
+          "timestamp": "2026-04-03T06:44:51.819Z",
+          "lane": "intake",
+          "event_kind": "command.received",
+          "lifecycle_state": "received",
+          "tracking_id": "20260403T064451814Z-a252d9f7",
+          "correlation_id": "corr-demo-004",
+          "idempotency_key": "demo-read-gateway-004",
+          "command_hash": "c99544939e311acc3092f758b18b5a873d26111c6400c5710479408ce9c307e1",
+          "action": "read_gateway_status",
+          "target": null,
+          "command_class": "standard",
+          "risk": "standard",
+          "status": "accepted",
+          "control_state": "accepted",
+          "evidence_state": null,
+          "requested_by": "verification-projector",
+          "source": "operator_console",
+          "approvals_required": [],
+          "result": null,
+          "detail": {
+            "channel": "gateway_api"
+          }
+        }
+      ]
+    },
+    "execution_feed": {
+      "timestamp": "2026-04-03T06:44:51.845Z",
+      "service": "AGENT-GATEWAY",
+      "lane": "execution",
+      "items": [
+        {
+          "timestamp": "2026-04-03T06:44:51.837Z",
+          "lane": "execution",
+          "event_kind": "command.dispatched",
+          "lifecycle_state": "dispatched",
+          "tracking_id": "20260403T064451814Z-a252d9f7",
+          "correlation_id": "corr-demo-004",
+          "idempotency_key": "demo-read-gateway-004",
+          "command_hash": "c99544939e311acc3092f758b18b5a873d26111c6400c5710479408ce9c307e1",
+          "action": "read_gateway_status",
+          "target": null,
+          "command_class": "standard",
+          "risk": "standard",
+          "status": "active",
+          "control_state": "accepted",
+          "evidence_state": "pending_write",
+          "requested_by": "verification-projector",
+          "source": "operator_console",
+          "approvals_required": [],
+          "result": null,
+          "detail": {
+            "dispatched_by": "gateway_api"
+          }
+        }
+      ]
+    }
+  }
+}

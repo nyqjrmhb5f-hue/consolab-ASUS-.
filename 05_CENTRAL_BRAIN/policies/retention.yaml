@@ -1,0 +1,10 @@
+mode: append_only
+evidence:
+  retention_period: 7y
+  archive_after: 365d
+  delete_mode: executive_approval_required
+runtime_journals:
+  retention_period: 90d
+  seal_before_archive: true
+commercial_records:
+  retention_period: 7y

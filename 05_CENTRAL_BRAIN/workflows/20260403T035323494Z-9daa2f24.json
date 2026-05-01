@@ -1,0 +1,15 @@
+{
+  "tracking_id": "20260403T035323494Z-9daa2f24",
+  "action": "refresh_room_state",
+  "target": null,
+  "details": {
+    "room_id": "05_CENTRAL_BRAIN"
+  },
+  "requested_by": "codex",
+  "source": "operator_console",
+  "channel": "gateway_api",
+  "risk": "standard",
+  "approvals_required": [],
+  "received_at": "2026-04-03T03:53:23.494Z",
+  "status": "accepted"
+}

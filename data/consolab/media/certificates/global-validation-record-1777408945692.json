@@ -1,0 +1,11 @@
+{
+  "id": "certificate-global-validation-record",
+  "type": "certificate",
+  "market": "global",
+  "name": "validation-record",
+  "issued_at": "2026-04-28T20:42:25.692Z",
+  "status": "VALID",
+  "evidence_hash": "053c0f326b274a89472f501cc06cf3cc4950aab878580fa97dcbb4c713f32c5d",
+  "verify_url": "https://vyrdx.vyrdon.com/verify/053c0f326b274a89472f501cc06cf3cc4950aab878580fa97dcbb4c713f32c5d",
+  "artifact_hash": "053c0f326b274a89472f501cc06cf3cc4950aab878580fa97dcbb4c713f32c5d"
+}
