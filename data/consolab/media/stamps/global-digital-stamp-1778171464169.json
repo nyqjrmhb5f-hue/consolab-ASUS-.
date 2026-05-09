@@ -1,0 +1,11 @@
+{
+  "id": "stamp-global-digital-stamp",
+  "type": "stamp",
+  "market": "global",
+  "name": "digital-stamp",
+  "issued_at": "2026-05-07T16:31:04.169Z",
+  "status": "VALID",
+  "evidence_hash": "a97cc5ba660ad8507f20aae565589ca4b3f92fe8c0f7c94d7ff46b85d03ace5d",
+  "verify_url": "https://vyrdx.vyrdon.com/verify/a97cc5ba660ad8507f20aae565589ca4b3f92fe8c0f7c94d7ff46b85d03ace5d",
+  "artifact_hash": "a97cc5ba660ad8507f20aae565589ca4b3f92fe8c0f7c94d7ff46b85d03ace5d"
+}

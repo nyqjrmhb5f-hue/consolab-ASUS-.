@@ -1,0 +1,11 @@
+{
+  "id": "flyer-dubai-authority",
+  "type": "flyer",
+  "market": "dubai",
+  "name": "authority",
+  "issued_at": "2026-05-08T07:55:15.186Z",
+  "status": "VALID",
+  "evidence_hash": "2e36928716f0a95779073508c5eb94ec804c223fe5232b69302681fd93639a71",
+  "verify_url": "https://vyrdx.vyrdon.com/verify/2e36928716f0a95779073508c5eb94ec804c223fe5232b69302681fd93639a71",
+  "artifact_hash": "2e36928716f0a95779073508c5eb94ec804c223fe5232b69302681fd93639a71"
+}
