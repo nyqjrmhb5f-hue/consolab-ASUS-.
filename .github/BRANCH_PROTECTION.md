@@ -14,14 +14,24 @@ GitHub only knows about a workflow's status checks AFTER the workflow has comple
 
 ## Required ruleset on `main`
 
-### Status checks (all four must pass)
+### Status checks (staged rollout)
 
-- `backend (test + build)`
-- `frontend (build)`
-- `06_INTERFACES schema lock`
-- `archive scripts (test + typecheck)`
+GitHub's protection UI only lets you require checks that have ALREADY run on `main`. The `archive scripts (test + typecheck)` job is conditional on `scripts/archive/` existing on the branch under test — it skips cleanly until PR #1 (daily-archive) lands on `main`. Until that happens, requiring it would block all merges with a check that never runs. Stage the ruleset:
+
+**Phase 1 (apply immediately after the first CI run on `main`):**
+
+- `CI / backend (test + build)`
+- `CI / frontend (build)`
+- `CI / 06_INTERFACES schema lock`
+
+**Phase 2 (apply after PR #1 lands on `main` and `scripts/archive/` exists):**
+
+- All Phase 1 checks
+- `CI / archive scripts (test + typecheck)`
 
 Mark the ruleset as "Require status checks to be up to date before merging" so a stale-base PR can't merge with green CI from before a `main` change.
+
+> **Verify the exact check names before saving the ruleset.** GitHub displays them as `<workflow>/<job-display-name>` (e.g. `CI / backend (test + build)`). If you copy-paste names from this doc and they don't match the dropdown, the ruleset will save but the check will never gate — silent failure. Always pick from the dropdown that GitHub populates from prior runs.
 
 ### Pull-request requirements
 
