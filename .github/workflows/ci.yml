@@ -1,0 +1,125 @@
+# ConsoleLab CI — runs on every PR and on pushes to main.
+#
+# Goals (per IQ200 follow-up E):
+#   - prove backend tests pass on every PR (zero-dep node:test suite)
+#   - prove the frontend builds without errors
+#   - prove the 06_INTERFACES locked schemas still load + validate a known-good
+#     fixture (catches drift on the immutable contract before it reaches main)
+#   - prove the daily-archive scripts type-check and pass their tests (only
+#     when those files are present on the branch under test, so this workflow
+#     can land before PR #1 merges to main)
+#
+# Jobs are independent so failures localize cleanly. Concurrency cancels older
+# runs on the same ref so a force-push doesn't pile up runners.
+
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    name: backend (test + build)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - name: install
+        working-directory: backend
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install --no-audit --no-fund
+          fi
+      - name: test
+        working-directory: backend
+        run: npm test
+      - name: build
+        working-directory: backend
+        run: npm run build
+
+  frontend:
+    name: frontend (build)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: install
+        working-directory: frontend
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install --no-audit --no-fund
+          fi
+      - name: build
+        working-directory: frontend
+        run: npm run build
+
+  schemas:
+    name: 06_INTERFACES schema lock
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+      - name: validate locked schemas
+        run: node .github/scripts/validate-locked-schemas.mjs
+
+  scripts:
+    name: archive scripts (test + typecheck)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - id: detect
+        name: detect daily-archive scripts
+        # The daily-archive workspace (top-level package.json + tsconfig.json +
+        # scripts/archive/) is added by PR #1. Until that lands, skip cleanly
+        # so this workflow can ship in parallel.
+        run: |
+          if [ -f package.json ] && [ -f tsconfig.json ] && [ -d scripts/archive ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::daily-archive scripts not present on this branch — skipping"
+          fi
+      - if: steps.detect.outputs.present == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - if: steps.detect.outputs.present == 'true'
+        name: install
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install --no-audit --no-fund
+          fi
+      - if: steps.detect.outputs.present == 'true'
+        name: typecheck
+        run: npx --yes tsc --noEmit
+      - if: steps.detect.outputs.present == 'true'
+        name: tests
+        run: npm run test:scripts
