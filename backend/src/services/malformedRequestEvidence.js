@@ -3,6 +3,31 @@ import path from "node:path";
 import crypto from "node:crypto";
 import { consoleLabPath } from "./consoleLabPaths.js";
 import { stableStringify } from "./evidenceAttestation.js";
+import { SCHEMA_VERSION } from "../../../06_INTERFACES/schemas/index.js";
+
+export const EXPECTED_SCHEMA_ID = "AuthorityRequest";
+
+/**
+ * Stable, machine-routable error class for a single schema-validator error.
+ * Falls back to `unknown` if the validator did not attach a `code` (which
+ * shouldn't happen for the locked schema, but we guard against drift).
+ */
+export function classifyValidationError(err) {
+  if (err && typeof err === "object" && typeof err.code === "string" && err.code.length > 0) {
+    return err.code;
+  }
+  return "unknown";
+}
+
+export function summarizeErrorClasses(errs) {
+  const counts = {};
+  if (!Array.isArray(errs)) return counts;
+  for (const e of errs) {
+    const cls = classifyValidationError(e);
+    counts[cls] = (counts[cls] || 0) + 1;
+  }
+  return counts;
+}
 
 const evidenceRoomRoot = consoleLabPath("04_EVIDENCE_ROOM");
 
@@ -79,6 +104,9 @@ export async function writeMalformedRequestEvidence({
     result: "rejected",
     recorded_at: timestamp
   };
+  const errorList = Array.isArray(schemaErrors) ? schemaErrors : [];
+  const errorClassCounts = summarizeErrorClasses(errorList);
+  const errorClasses = Object.keys(errorClassCounts).sort();
   const richRow = {
     event_id: eventId,
     tx_hash: txHash,
@@ -89,6 +117,10 @@ export async function writeMalformedRequestEvidence({
     action: "authority.malformed_request",
     result: "rejected",
     reason_code: "MALFORMED_REQUEST",
+    expected_schema_id: EXPECTED_SCHEMA_ID,
+    schema_version: SCHEMA_VERSION,
+    error_classes: errorClasses,
+    error_class_counts: errorClassCounts,
     source_surface: sourceSurface,
     source_ip: sourceIp,
     correlation_id: correlationId,
@@ -96,10 +128,11 @@ export async function writeMalformedRequestEvidence({
     tracking_id_hint,
     action_hint,
     schema_version_hint,
-    parse_error_count: Array.isArray(schemaErrors) ? schemaErrors.length : 0,
-    parse_errors: (Array.isArray(schemaErrors) ? schemaErrors : []).slice(0, 16).map((e) => ({
+    parse_error_count: errorList.length,
+    parse_errors: errorList.slice(0, 16).map((e) => ({
       path: typeof e?.path === "string" ? e.path.slice(0, 256) : null,
-      message: typeof e?.message === "string" ? e.message.slice(0, 256) : null
+      message: typeof e?.message === "string" ? e.message.slice(0, 256) : null,
+      error_class: classifyValidationError(e)
     })),
     recorded_at: timestamp
   };
@@ -152,6 +185,8 @@ export async function writeMalformedRequestRateLimitSummary({
     action: "authority.malformed_request_rate_limit_hit",
     result: "rejected",
     reason_code: "MALFORMED_REQUEST_RATE_LIMITED",
+    expected_schema_id: EXPECTED_SCHEMA_ID,
+    schema_version: SCHEMA_VERSION,
     rate_limit_key: rateLimitKey,
     hit_count: hitCount,
     window_started_at: windowStartedAt,

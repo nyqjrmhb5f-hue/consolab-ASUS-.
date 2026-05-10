@@ -13,7 +13,14 @@ import {
   createMalformedRequestRateLimiter,
   buildRateLimitKey
 } from "../malformedRequestRateLimit.js";
-import { computeRequestHash } from "../malformedRequestEvidence.js";
+import {
+  computeRequestHash,
+  writeMalformedRequestEvidence,
+  writeMalformedRequestRateLimitSummary,
+  summarizeErrorClasses,
+  classifyValidationError,
+  EXPECTED_SCHEMA_ID
+} from "../malformedRequestEvidence.js";
 
 import { payloadHash } from "../../lib/stableJson.js";
 import { signPayloadHash, verifyPayloadHash } from "../keyStore.js";
@@ -485,6 +492,31 @@ describe("decideAuthority — malformed-request handling", () => {
     assert.equal(decision._meta.evidence_written, true);
     assert.equal(malformedRecorder.malformedRows.length, 1);
     assert.equal(malformedRecorder.malformedRows[0].schemaErrors.length > 0, true);
+    // A.1 tightening: every validator error carries a stable `code` so the
+    // evidence row can route on machine-readable error_class buckets.
+    for (const err of malformedRecorder.malformedRows[0].schemaErrors) {
+      assert.equal(typeof err.code, "string");
+      assert.ok(err.code.length > 0, "validator must attach a non-empty code");
+    }
+  });
+
+  test("schema validator emits stable error codes for known violations", () => {
+    const cases = [
+      { mutate: (r) => { delete r.tracking_id; }, expected: "missing_required_property" },
+      { mutate: (r) => { r.unexpected_field = "x"; }, expected: "additional_property_disallowed" },
+      { mutate: (r) => { r.schema_version = "v0"; }, expected: "const_mismatch" },
+      { mutate: (r) => { r.tracking_id = 42; }, expected: "type_mismatch" },
+      { mutate: (r) => { r.action = "BAD ACTION"; }, expected: "pattern_mismatch" },
+      { mutate: (r) => { r.scope = ["dup", "dup"]; }, expected: "unique_items_violation" }
+    ];
+    for (const { mutate, expected } of cases) {
+      const req = buildRequest();
+      mutate(req);
+      const result = validateAuthorityRequest(req);
+      assert.equal(result.ok, false, `case ${expected} expected to fail validation`);
+      const codes = result.errors.map((e) => e.code);
+      assert.ok(codes.includes(expected), `expected error code ${expected} in ${JSON.stringify(codes)}`);
+    }
   });
 
   test("malformed packet payloadHash equals sha256(stableStringify(rawRequest)) so the rejection is non-repudiable", async () => {
@@ -590,6 +622,97 @@ describe("decideAuthority — malformed rate limiting", () => {
   test("buildRateLimitKey: falls back to 'anon' when no session/correlation", () => {
     const key = buildRateLimitKey({ sourceIp: "10.0.0.1" });
     assert.equal(key, "10.0.0.1|anon");
+  });
+
+  test("malformed_requests rich row carries expected_schema_id, schema_version, error_classes, error_class_counts", async () => {
+    const captured = [];
+    const fakeAppend = async (filePath, payload) => {
+      captured.push({ filePath, payload });
+    };
+    const stamp = await writeMalformedRequestEvidence({
+      rawRequest: { schema_version: "v0", action: "BAD ACTION" },
+      schemaErrors: [
+        { path: "AuthorityRequest.schema_version", message: "...", code: "const_mismatch" },
+        { path: "AuthorityRequest.action", message: "...", code: "pattern_mismatch" },
+        { path: "AuthorityRequest.tracking_id", message: "...", code: "missing_required_property" },
+        { path: "AuthorityRequest.payload", message: "...", code: "missing_required_property" },
+        { path: "AuthorityRequest.requested_by", message: "...", code: "missing_required_property" },
+        { path: "AuthorityRequest.ts", message: "...", code: "missing_required_property" }
+      ],
+      sourceSurface: "test-surface",
+      sourceIp: "10.1.2.3",
+      correlationId: "corr-A",
+      tunnelSessionId: null,
+      ts: "2026-04-03T12:00:00.000Z",
+      appendJsonl: fakeAppend
+    });
+    assert.ok(stamp.event_id);
+    assert.ok(stamp.tx_hash);
+    assert.equal(stamp.ref_path, "04_EVIDENCE_ROOM/malformed_requests/events.jsonl");
+    assert.equal(stamp.audit_trails_ref_path, "04_EVIDENCE_ROOM/audit_trails/events.jsonl");
+
+    assert.equal(captured.length, 2, "must write to audit_trails AND malformed_requests");
+    const audit = captured.find((c) => c.filePath.endsWith("audit_trails/events.jsonl"));
+    const rich = captured.find((c) => c.filePath.endsWith("malformed_requests/events.jsonl"));
+    assert.ok(audit && rich);
+
+    // audit row stays minimal
+    assert.equal(audit.payload.action, "authority.malformed_request");
+    assert.equal(audit.payload.result, "rejected");
+    assert.ok(!("error_classes" in audit.payload), "audit row must not carry rich error fields");
+
+    // rich row carries the A.1 fields
+    assert.equal(rich.payload.expected_schema_id, EXPECTED_SCHEMA_ID);
+    assert.equal(rich.payload.expected_schema_id, "AuthorityRequest");
+    assert.equal(rich.payload.schema_version, SCHEMA_VERSION);
+    assert.deepEqual(
+      rich.payload.error_classes,
+      ["const_mismatch", "missing_required_property", "pattern_mismatch"],
+      "error_classes must be sorted unique enum keys"
+    );
+    assert.deepEqual(rich.payload.error_class_counts, {
+      const_mismatch: 1,
+      missing_required_property: 4,
+      pattern_mismatch: 1
+    });
+    assert.equal(rich.payload.parse_error_count, 6);
+    // Each parse_errors entry also carries error_class for downstream routing.
+    for (const e of rich.payload.parse_errors) {
+      assert.ok(typeof e.error_class === "string" && e.error_class.length > 0);
+    }
+  });
+
+  test("malformed rate-limit summary row carries expected_schema_id and schema_version", async () => {
+    const captured = [];
+    const fakeAppend = async (filePath, payload) => {
+      captured.push({ filePath, payload });
+    };
+    await writeMalformedRequestRateLimitSummary({
+      rateLimitKey: "10.1.2.3|tun-x",
+      hitCount: 12,
+      windowStartedAt: "2026-04-03T11:59:00.000Z",
+      ts: "2026-04-03T12:00:00.000Z",
+      appendJsonl: fakeAppend
+    });
+    const rich = captured.find((c) => c.filePath.endsWith("malformed_requests/events.jsonl"));
+    assert.ok(rich);
+    assert.equal(rich.payload.expected_schema_id, "AuthorityRequest");
+    assert.equal(rich.payload.schema_version, SCHEMA_VERSION);
+    assert.equal(rich.payload.action, "authority.malformed_request_rate_limit_hit");
+    assert.equal(rich.payload.reason_code, "MALFORMED_REQUEST_RATE_LIMITED");
+    assert.equal(rich.payload.hit_count, 12);
+  });
+
+  test("summarizeErrorClasses + classifyValidationError fall back to 'unknown' on missing code", () => {
+    assert.equal(classifyValidationError(null), "unknown");
+    assert.equal(classifyValidationError({}), "unknown");
+    assert.equal(classifyValidationError({ code: "" }), "unknown");
+    assert.equal(classifyValidationError({ code: "type_mismatch" }), "type_mismatch");
+    assert.deepEqual(summarizeErrorClasses(null), {});
+    assert.deepEqual(
+      summarizeErrorClasses([{ code: "type_mismatch" }, { code: "type_mismatch" }, {}]),
+      { type_mismatch: 2, unknown: 1 }
+    );
   });
 
   test("rate limiter sliding window: events older than windowMs are pruned", async () => {

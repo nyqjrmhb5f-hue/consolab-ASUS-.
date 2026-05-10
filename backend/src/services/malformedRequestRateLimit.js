@@ -1,10 +1,16 @@
 /**
  * In-process sliding-window rate limiter for ConsoleLab's malformed-request
- * channel. Resets on process restart by design: persisting these counters
- * into 04_EVIDENCE_ROOM would amplify writes on the exact path we want cheap
- * (a malformed-spam attacker trying to fill the vault).
+ * channel.
  *
  * Defaults: 10 events / 60s per key. Configurable via deps for tests.
+ *
+ * TODO(authority-engine MVP): counters live in process memory and reset on
+ * restart. This is acceptable for the authority engine MVP (per IQ200
+ * decision Q2). If the threat model expands to attackers who can trigger
+ * frequent restarts, promote this to a persisted counter — most likely
+ * against a sealed redis/sqlite, NOT 04_EVIDENCE_ROOM, since persisting
+ * counters into evidence would amplify writes on the exact path we want
+ * cheap (a malformed-spam attacker trying to fill the vault).
  */
 
 export const DEFAULT_LIMIT = 10;
