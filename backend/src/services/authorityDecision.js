@@ -60,6 +60,7 @@ export async function decideAuthority({ request, deps = {} }) {
     return await emitDecision({
       kind: "needs_info",
       reason: `${missingAxes[0]}_missing`,
+      requiredNext: { axes: missingAxes },
       request,
       computedPayloadHash,
       decisionTs,
@@ -79,6 +80,7 @@ export async function decideAuthority({ request, deps = {} }) {
     return await emitDecision({
       kind: "rejected",
       reason: `unknown_standard:${request.standard}`,
+      requiredNext: null,
       request,
       computedPayloadHash,
       decisionTs,
@@ -94,6 +96,7 @@ export async function decideAuthority({ request, deps = {} }) {
     return await emitDecision({
       kind: "rejected",
       reason: `policy_version_mismatch:expected=${policyVersion}:got=${request.policy}`,
+      requiredNext: null,
       request,
       computedPayloadHash,
       decisionTs,
@@ -113,6 +116,7 @@ export async function decideAuthority({ request, deps = {} }) {
     return await emitDecision({
       kind: "needs_info",
       reason: `scope_incomplete:missing=${missingScopes.join(",")}`,
+      requiredNext: { scopes: missingScopes },
       request,
       computedPayloadHash,
       decisionTs,
@@ -127,6 +131,7 @@ export async function decideAuthority({ request, deps = {} }) {
   return await emitDecision({
     kind: "approved",
     reason: null,
+    requiredNext: null,
     request,
     computedPayloadHash,
     decisionTs,
@@ -154,6 +159,7 @@ function decisionKindToEnum(kind) {
 async function emitDecision({
   kind,
   reason,
+  requiredNext,
   request,
   computedPayloadHash,
   decisionTs,
@@ -209,6 +215,12 @@ async function emitDecision({
     ts: decisionTs
   };
   if (reason) packet.reason = reason;
+  if (requiredNext && (Array.isArray(requiredNext.axes) || Array.isArray(requiredNext.scopes))) {
+    const next = {};
+    if (Array.isArray(requiredNext.axes) && requiredNext.axes.length > 0) next.axes = requiredNext.axes;
+    if (Array.isArray(requiredNext.scopes) && requiredNext.scopes.length > 0) next.scopes = requiredNext.scopes;
+    if (Object.keys(next).length > 0) packet.requiredNext = next;
+  }
   if (request.correlation_id) packet.correlation_id = request.correlation_id;
 
   // 3. Self-check: the packet we're about to return MUST satisfy the lock.

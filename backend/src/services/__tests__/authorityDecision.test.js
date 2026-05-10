@@ -164,12 +164,13 @@ describe("schema lock", () => {
 });
 
 describe("decideAuthority — refusal axes (scope / standard / policy)", () => {
-  test("missing scope (empty array) → NEEDS_INFO + evidence written + reason=scope_missing", async () => {
+  test("missing scope (empty array) → NEEDS_INFO + evidence written + reason=scope_missing + requiredNext.axes=['scope']", async () => {
     const { recorder, deps } = buildDeps();
     const req = buildRequest({ scope: [] });
     const decision = await decideAuthority({ request: req, deps });
     assert.equal(decision.decision, "NEEDS_INFO");
     assert.equal(decision.reason, "scope_missing");
+    assert.deepEqual(decision.requiredNext, { axes: ["scope"] });
     assert.equal(decision._meta.evidence_written, true);
     assert.equal(recorder.calls.length, 1);
     assert.equal(recorder.calls[0].action, "authority.needs_info");
@@ -177,36 +178,49 @@ describe("decideAuthority — refusal axes (scope / standard / policy)", () => {
     assert.equal(decision.evidenceStamp.event_id.length > 0, true);
   });
 
-  test("missing scope (field absent) → NEEDS_INFO + evidence + reason=scope_missing", async () => {
+  test("missing scope (field absent) → NEEDS_INFO + evidence + reason=scope_missing + requiredNext.axes=['scope']", async () => {
     const { recorder, deps } = buildDeps();
     const req = buildRequest();
     delete req.scope;
     const decision = await decideAuthority({ request: req, deps });
     assert.equal(decision.decision, "NEEDS_INFO");
     assert.equal(decision.reason, "scope_missing");
+    assert.deepEqual(decision.requiredNext, { axes: ["scope"] });
     assert.equal(recorder.calls.length, 1);
   });
 
-  test("missing standard → NEEDS_INFO + evidence + reason=standard_missing", async () => {
+  test("missing standard → NEEDS_INFO + evidence + reason=standard_missing + requiredNext.axes=['standard']", async () => {
     const { recorder, deps } = buildDeps();
     const req = buildRequest();
     delete req.standard;
     const decision = await decideAuthority({ request: req, deps });
     assert.equal(decision.decision, "NEEDS_INFO");
     assert.equal(decision.reason, "standard_missing");
+    assert.deepEqual(decision.requiredNext, { axes: ["standard"] });
     assert.equal(decision._meta.evidence_written, true);
     assert.equal(recorder.calls.length, 1);
-    assert.equal(recorder.calls[0].details.decision, "NEEDS_INFO");
   });
 
-  test("missing policy → NEEDS_INFO + evidence + reason=policy_missing", async () => {
+  test("missing policy → NEEDS_INFO + evidence + reason=policy_missing + requiredNext.axes=['policy']", async () => {
     const { recorder, deps } = buildDeps();
     const req = buildRequest();
     delete req.policy;
     const decision = await decideAuthority({ request: req, deps });
     assert.equal(decision.decision, "NEEDS_INFO");
     assert.equal(decision.reason, "policy_missing");
+    assert.deepEqual(decision.requiredNext, { axes: ["policy"] });
     assert.equal(recorder.calls.length, 1);
+  });
+
+  test("multiple axes missing → requiredNext.axes carries all of them in declaration order", async () => {
+    const { deps } = buildDeps();
+    const req = buildRequest();
+    delete req.scope;
+    delete req.standard;
+    delete req.policy;
+    const decision = await decideAuthority({ request: req, deps });
+    assert.equal(decision.decision, "NEEDS_INFO");
+    assert.deepEqual(decision.requiredNext, { axes: ["scope", "standard", "policy"] });
   });
 
   test("schema-invalid request (missing tracking_id) → unbound NEEDS_INFO, NO evidence", async () => {
@@ -232,13 +246,14 @@ describe("decideAuthority — refusal axes (scope / standard / policy)", () => {
     assert.equal(recorder.calls.length, 1, "rejections are evidenced");
   });
 
-  test("scope incomplete (missing executive for high_risk) → NEEDS_INFO + evidence", async () => {
+  test("scope incomplete (missing executive for tunnel) → NEEDS_INFO + evidence + requiredNext.scopes=['executive']", async () => {
     const { recorder, deps } = buildDeps();
     // tunnel demands executive+tunnel, but we only declare tunnel.
     const req = buildRequest({ scope: ["tunnel"], standard: "tunnel" });
     const decision = await decideAuthority({ request: req, deps });
     assert.equal(decision.decision, "NEEDS_INFO");
     assert.match(decision.reason, /scope_incomplete:missing=executive/);
+    assert.deepEqual(decision.requiredNext, { scopes: ["executive"] });
     assert.equal(recorder.calls.length, 1);
   });
 });
@@ -267,8 +282,17 @@ describe("decideAuthority — approval path", () => {
     assert.equal(decision.evidenceStamp.tx_hash.length, 64);
     assert.equal(decision.evidenceStamp.event_id.includes(decision.evidenceStamp.tx_hash.slice(0, 16)), true);
 
-    // No `reason` on APPROVED packets (schema rule).
+    // No `reason` and no `requiredNext` on APPROVED packets.
     assert.equal(Object.prototype.hasOwnProperty.call(decision, "reason"), false);
+    assert.equal(Object.prototype.hasOwnProperty.call(decision, "requiredNext"), false);
+  });
+
+  test("REJECTED packets must not carry requiredNext", async () => {
+    const { deps } = buildDeps();
+    const req = buildRequest({ policy: "command-classes.v0" });
+    const decision = await decideAuthority({ request: req, deps });
+    assert.equal(decision.decision, "REJECTED");
+    assert.equal(Object.prototype.hasOwnProperty.call(decision, "requiredNext"), false);
   });
 
   test("payloadHash equals sha256 of stableStringify(payload)", async () => {

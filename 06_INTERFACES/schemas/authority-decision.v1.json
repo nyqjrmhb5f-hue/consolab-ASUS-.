@@ -52,6 +52,32 @@
       "type": "string",
       "enum": ["APPROVED", "REJECTED", "NEEDS_INFO"]
     },
+    "RequiredNext": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Deterministic repair hint for NEEDS_INFO decisions. The runtime can re-submit a fully repaired AuthorityRequest by adding the listed axes/scopes. Absent on APPROVED, REJECTED, and unbound packets.",
+      "properties": {
+        "axes": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 8,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": ["scope", "standard", "policy"]
+          },
+          "description": "Top-level authority axes that were missing or empty in the inbound request."
+        },
+        "scopes": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/ScopeName" },
+          "description": "Specific approval scopes the runtime must add to satisfy the policy class."
+        }
+      }
+    },
     "EvidenceStamp": {
       "type": "object",
       "additionalProperties": false,
@@ -168,6 +194,7 @@
           "maxLength": 256,
           "description": "Required when decision != APPROVED; identifies why the decision was not APPROVED."
         },
+        "requiredNext": { "$ref": "#/definitions/RequiredNext" },
         "correlation_id": { "$ref": "#/definitions/TrackingId" }
       }
     }
