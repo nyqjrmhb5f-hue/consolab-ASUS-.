@@ -8,7 +8,7 @@
     "start": "node src/index.js",
     "build": "rm -rf dist && mkdir -p dist/src && cp -R src/. dist/src/",
     "smoke": "node scripts/smoke.mjs",
-    "test": "node --test src/services/__tests__/*.test.js"
+    "test": "node --test src/services/__tests__/*.test.js src/routes/__tests__/*.test.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
