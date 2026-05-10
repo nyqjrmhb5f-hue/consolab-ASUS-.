@@ -4,6 +4,7 @@ import { appendEvidence } from "./services/evidenceStore.js";
 import { verifyAccessRequest } from "./services/accessControl.js";
 import { buildAuthorityStatus, signAuthorityPayload, verifyRuntimeAttestation } from "./services/authorityService.js";
 import { getStatusPayload, renderStatusPage } from "./services/statusPage.js";
+import { createAuthorityRouter } from "./routes/authority.js";
 
 const app = express();
 const CANONICAL_AUTHORITY_HOST = "consolelab.vyrdon.com";
@@ -198,6 +199,12 @@ app.post("/sign", requireAccess, handleSign);
 app.post("/api/sign", requireAccess, handleSign);
 app.post("/attest/verify", requireAccess, handleAttestVerify);
 app.post("/api/attest/verify", requireAccess, handleAttestVerify);
+
+// Authority decision ingress (06_INTERFACES schema-locked). Same access
+// gate as /sign and /attest/verify; ConsoleLab remains read-only to
+// VYRDX/Dell runtime hosts (decideAuthority only reads policy + writes
+// evidence).
+app.use(createAuthorityRouter({ requireAccess }));
 
 app.use(async (req, res) => {
   if (req.path !== "/favicon.ico") {

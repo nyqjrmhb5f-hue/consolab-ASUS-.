@@ -11,6 +11,7 @@ id_ed25519*
 
 # runtime evidence hot files
 04_EVIDENCE_ROOM/actions/events.jsonl
+04_EVIDENCE_ROOM/malformed_requests/events.jsonl
 *.log
 
 # generated outputs
