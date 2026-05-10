@@ -1,0 +1,175 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://consolelab.vyrdon.com/schemas/authority-decision.v1.json",
+  "title": "ConsoleLab Authority Decision — v1",
+  "description": "Locked contract for ConsoleLab authority traffic. ConsoleLab receives an AuthorityRequest packet and returns an AuthorityDecision packet. ConsoleLab is the only component that produces AuthorityDecision packets; bots and runtimes never authorize. Every decision (including REJECTED and NEEDS_INFO) is bound to an immutable evidence stamp in 04_EVIDENCE_ROOM.",
+  "version": "authority-decision.v1",
+
+  "definitions": {
+    "Iso8601": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d{1,9})?Z$"
+    },
+    "TrackingId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$"
+    },
+    "ShortIdentifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,63}$"
+    },
+    "ScopeName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+    },
+    "Standard": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+    },
+    "PolicyVersion": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[a-z][a-z0-9.+_-]{0,63}$"
+    },
+    "PayloadHash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "Algorithm": {
+      "type": "string",
+      "enum": ["ed25519", "rsa", "ec", "unknown"]
+    },
+    "Decision": {
+      "type": "string",
+      "enum": ["APPROVED", "REJECTED", "NEEDS_INFO"]
+    },
+    "EvidenceStamp": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event_id", "tx_hash", "recorded_at", "ref_path"],
+      "properties": {
+        "event_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "description": "Identifier of the JSONL line written to 04_EVIDENCE_ROOM. Format: <ts>-<tx_hash[0:16]>."
+        },
+        "tx_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "SHA-256 hex digest of the canonical evidence entry."
+        },
+        "recorded_at": { "$ref": "#/definitions/Iso8601" },
+        "ref_path": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Repo-relative path of the JSONL artifact carrying this evidence line (e.g. 04_EVIDENCE_ROOM/audit_trails/events.jsonl)."
+        }
+      }
+    },
+
+    "AuthorityRequest": {
+      "type": "object",
+      "title": "AuthorityRequest",
+      "description": "Inbound packet asking ConsoleLab to render an authority decision. The envelope (schema_version, tracking_id, action, payload, requested_by, ts) is structurally required. The authority axes (scope, standard, policy) are runtime-checked: when missing or empty, ConsoleLab returns NEEDS_INFO with reason=<axis>_missing and an evidenceStamp pointing at the immutable refusal record.",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "tracking_id",
+        "action",
+        "payload",
+        "requested_by",
+        "ts"
+      ],
+      "properties": {
+        "schema_version": { "const": "authority-decision.v1" },
+        "tracking_id": { "$ref": "#/definitions/TrackingId" },
+        "action": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-z][a-z0-9_:.-]{0,127}$"
+        },
+        "scope": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/ScopeName" },
+          "description": "Approval scopes that must concur for APPROVED. Runtime-required: an empty or absent array surfaces NEEDS_INFO with reason=scope_missing."
+        },
+        "standard": { "$ref": "#/definitions/Standard" },
+        "policy": { "$ref": "#/definitions/PolicyVersion" },
+        "payload": {
+          "type": "object",
+          "description": "Free-form structured payload describing what the runtime is asking for. Hashed for the signature.",
+          "additionalProperties": true
+        },
+        "requested_by": { "$ref": "#/definitions/ShortIdentifier" },
+        "ts": { "$ref": "#/definitions/Iso8601" },
+        "correlation_id": { "$ref": "#/definitions/TrackingId" }
+      }
+    },
+
+    "AuthorityDecision": {
+      "type": "object",
+      "title": "AuthorityDecision",
+      "description": "Outbound packet returned by ConsoleLab. Carries the decision, the scope/standard/policy axes that were checked, an evidenceStamp pointing to the immutable record in 04_EVIDENCE_ROOM, and a signature over payloadHash.",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "tracking_id",
+        "decision",
+        "scope",
+        "standard",
+        "policy",
+        "payloadHash",
+        "evidenceStamp",
+        "signature",
+        "key_id",
+        "algorithm",
+        "ts"
+      ],
+      "properties": {
+        "schema_version": { "const": "authority-decision.v1" },
+        "tracking_id": { "$ref": "#/definitions/TrackingId" },
+        "decision": { "$ref": "#/definitions/Decision" },
+        "scope": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 16,
+          "uniqueItems": true,
+          "items": { "$ref": "#/definitions/ScopeName" }
+        },
+        "standard": { "$ref": "#/definitions/Standard" },
+        "policy": { "$ref": "#/definitions/PolicyVersion" },
+        "payloadHash": { "$ref": "#/definitions/PayloadHash" },
+        "evidenceStamp": { "$ref": "#/definitions/EvidenceStamp" },
+        "signature": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Base64 signature over payloadHash, produced by the ConsoleLab active signing key."
+        },
+        "key_id": { "$ref": "#/definitions/ShortIdentifier" },
+        "algorithm": { "$ref": "#/definitions/Algorithm" },
+        "ts": { "$ref": "#/definitions/Iso8601" },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "description": "Required when decision != APPROVED; identifies why the decision was not APPROVED."
+        },
+        "correlation_id": { "$ref": "#/definitions/TrackingId" }
+      }
+    }
+  }
+}
