@@ -1,0 +1,15 @@
+[Unit]
+Description=ConsoleLab daily authority report archive
+Documentation=file:///home/t79/vyrdon/consolelab/archives/daily/README.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/t79/vyrdon/consolelab
+Environment=NODE_ENV=production
+# Wrapper resolves an fnm-managed (or system) node before invoking tsx —
+# systemd user units don't inherit the interactive shell's PATH.
+ExecStart=/bin/bash /home/t79/vyrdon/consolelab/scripts/archive/run-daily-report.sh
+NoNewPrivileges=true
+PrivateTmp=true

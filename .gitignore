@@ -12,3 +12,9 @@ id_ed25519*
 # runtime evidence hot files
 04_EVIDENCE_ROOM/actions/events.jsonl
 *.log
+
+# Daily archive reports are generated on the ASUS host by the systemd timer.
+# Only the README is tracked; per-day reports stay on disk.
+archives/daily/**
+!archives/daily/
+!archives/daily/README.md

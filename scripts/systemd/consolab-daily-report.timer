@@ -1,0 +1,12 @@
+[Unit]
+Description=ConsoleLab daily authority report — fires once per day at 00:03 local
+Documentation=file:///home/t79/vyrdon/consolelab/archives/daily/README.md
+
+[Timer]
+OnCalendar=*-*-* 00:03:00
+Persistent=true
+AccuracySec=1min
+Unit=consolab-daily-report.service
+
+[Install]
+WantedBy=timers.target
