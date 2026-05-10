@@ -45,8 +45,8 @@ function resolveRef(ref) {
   return target;
 }
 
-function pushError(errors, pathStack, message) {
-  errors.push({ path: pathStack.join("."), message });
+function pushError(errors, pathStack, message, code) {
+  errors.push({ path: pathStack.join("."), message, code });
 }
 
 function validateNode(node, schema, pathStack, errors) {
@@ -56,14 +56,14 @@ function validateNode(node, schema, pathStack, errors) {
 
   if (schema.const !== undefined) {
     if (node !== schema.const) {
-      pushError(errors, pathStack, `expected const ${JSON.stringify(schema.const)}, got ${JSON.stringify(node)}`);
+      pushError(errors, pathStack, `expected const ${JSON.stringify(schema.const)}, got ${JSON.stringify(node)}`, "const_mismatch");
     }
     return;
   }
 
   if (Array.isArray(schema.enum)) {
     if (!schema.enum.includes(node)) {
-      pushError(errors, pathStack, `must be one of ${JSON.stringify(schema.enum)}, got ${JSON.stringify(node)}`);
+      pushError(errors, pathStack, `must be one of ${JSON.stringify(schema.enum)}, got ${JSON.stringify(node)}`, "enum_mismatch");
       return;
     }
   }
@@ -71,32 +71,32 @@ function validateNode(node, schema, pathStack, errors) {
   switch (schema.type) {
     case "string":
       if (typeof node !== "string") {
-        pushError(errors, pathStack, `expected string, got ${typeof node}`);
+        pushError(errors, pathStack, `expected string, got ${typeof node}`, "type_mismatch");
         return;
       }
       if (typeof schema.minLength === "number" && node.length < schema.minLength) {
-        pushError(errors, pathStack, `string shorter than minLength=${schema.minLength}`);
+        pushError(errors, pathStack, `string shorter than minLength=${schema.minLength}`, "length_violation");
       }
       if (typeof schema.maxLength === "number" && node.length > schema.maxLength) {
-        pushError(errors, pathStack, `string longer than maxLength=${schema.maxLength}`);
+        pushError(errors, pathStack, `string longer than maxLength=${schema.maxLength}`, "length_violation");
       }
       if (typeof schema.pattern === "string") {
         const re = new RegExp(schema.pattern);
         if (!re.test(node)) {
-          pushError(errors, pathStack, `string does not match pattern ${schema.pattern}`);
+          pushError(errors, pathStack, `string does not match pattern ${schema.pattern}`, "pattern_mismatch");
         }
       }
       return;
 
     case "object": {
       if (node === null || typeof node !== "object" || Array.isArray(node)) {
-        pushError(errors, pathStack, `expected object, got ${Array.isArray(node) ? "array" : typeof node}`);
+        pushError(errors, pathStack, `expected object, got ${Array.isArray(node) ? "array" : typeof node}`, "type_mismatch");
         return;
       }
       const required = Array.isArray(schema.required) ? schema.required : [];
       for (const field of required) {
         if (!Object.prototype.hasOwnProperty.call(node, field)) {
-          pushError(errors, pathStack.concat(field), `missing required field`);
+          pushError(errors, pathStack.concat(field), `missing required field`, "missing_required_property");
         }
       }
       const properties = schema.properties || {};
@@ -105,7 +105,7 @@ function validateNode(node, schema, pathStack, errors) {
         if (Object.prototype.hasOwnProperty.call(properties, key)) {
           validateNode(value, properties[key], pathStack.concat(key), errors);
         } else if (additionalProperties === false) {
-          pushError(errors, pathStack.concat(key), `additional property not allowed`);
+          pushError(errors, pathStack.concat(key), `additional property not allowed`, "additional_property_disallowed");
         } else if (additionalProperties && typeof additionalProperties === "object") {
           validateNode(value, additionalProperties, pathStack.concat(key), errors);
         }
@@ -115,21 +115,21 @@ function validateNode(node, schema, pathStack, errors) {
 
     case "array": {
       if (!Array.isArray(node)) {
-        pushError(errors, pathStack, `expected array, got ${typeof node}`);
+        pushError(errors, pathStack, `expected array, got ${typeof node}`, "type_mismatch");
         return;
       }
       if (typeof schema.minItems === "number" && node.length < schema.minItems) {
-        pushError(errors, pathStack, `array shorter than minItems=${schema.minItems}`);
+        pushError(errors, pathStack, `array shorter than minItems=${schema.minItems}`, "array_length_violation");
       }
       if (typeof schema.maxItems === "number" && node.length > schema.maxItems) {
-        pushError(errors, pathStack, `array longer than maxItems=${schema.maxItems}`);
+        pushError(errors, pathStack, `array longer than maxItems=${schema.maxItems}`, "array_length_violation");
       }
       if (schema.uniqueItems === true) {
         const seen = new Set();
         for (const item of node) {
           const k = typeof item === "string" ? `s:${item}` : JSON.stringify(item);
           if (seen.has(k)) {
-            pushError(errors, pathStack, `array items must be unique`);
+            pushError(errors, pathStack, `array items must be unique`, "unique_items_violation");
             break;
           }
           seen.add(k);
@@ -146,13 +146,13 @@ function validateNode(node, schema, pathStack, errors) {
     case "number":
     case "integer":
       if (typeof node !== "number" || (schema.type === "integer" && !Number.isInteger(node))) {
-        pushError(errors, pathStack, `expected ${schema.type}, got ${typeof node}`);
+        pushError(errors, pathStack, `expected ${schema.type}, got ${typeof node}`, "type_mismatch");
       }
       return;
 
     case "boolean":
       if (typeof node !== "boolean") {
-        pushError(errors, pathStack, `expected boolean, got ${typeof node}`);
+        pushError(errors, pathStack, `expected boolean, got ${typeof node}`, "type_mismatch");
       }
       return;
 
@@ -175,13 +175,15 @@ function validateAgainst(definitionName, packet) {
     if (packet.decision && packet.decision !== "APPROVED" && !packet.reason) {
       errors.push({
         path: `${definitionName}.reason`,
-        message: `reason is required when decision != APPROVED`
+        message: `reason is required when decision != APPROVED`,
+        code: "missing_required_property"
       });
     }
     if (packet.decision === "APPROVED" && Object.prototype.hasOwnProperty.call(packet, "reason")) {
       errors.push({
         path: `${definitionName}.reason`,
-        message: `reason must be absent when decision == APPROVED`
+        message: `reason must be absent when decision == APPROVED`,
+        code: "additional_property_disallowed"
       });
     }
   }

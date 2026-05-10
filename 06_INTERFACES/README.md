@@ -13,7 +13,7 @@ Key flows:
 
 | File | Version | Purpose |
 | --- | --- | --- |
-| [`schemas/authority-decision.v1.json`](./schemas/authority-decision.v1.json) | `authority-decision.v1` | Inbound `AuthorityRequest` and outbound `AuthorityDecision` packets that ConsoleLab uses to render approve/reject/needs-info verdicts. Required axes on every request: `scope`, `standard`, `policy`. Every decision (including refusals) carries an `evidenceStamp` that points to the immutable record in `04_EVIDENCE_ROOM`. |
+| [`schemas/authority-decision.v1.json`](./schemas/authority-decision.v1.json) | `authority-decision.v1` | Inbound `AuthorityRequest` and outbound `AuthorityDecision` packets that ConsoleLab uses to render approve/reject/needs-info verdicts. Required axes on every request: `scope`, `standard`, `policy`. Every decision (including refusals) carries an `evidenceStamp` that points to the immutable record in `04_EVIDENCE_ROOM`. Schema-invalid packets are rendered as `REJECTED` with `reasonCode=MALFORMED_REQUEST` and a row in `04_EVIDENCE_ROOM/malformed_requests/events.jsonl`; over-limit malformed traffic gets `reasonCode=MALFORMED_REQUEST_RATE_LIMITED` with a single summary row per minute per key. |
 
 The schemas in this directory are the contractual handshake between every other room. They are versioned by file name (`*.vN.json`); never mutate a published version in place — publish a new file alongside it.
 

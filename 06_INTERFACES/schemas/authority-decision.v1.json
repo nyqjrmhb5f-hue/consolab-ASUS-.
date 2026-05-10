@@ -52,6 +52,14 @@
       "type": "string",
       "enum": ["APPROVED", "REJECTED", "NEEDS_INFO"]
     },
+    "ReasonCode": {
+      "type": "string",
+      "description": "Structured reason code. Free-form prose stays in `reason`; this is the machine-stable enum every caller can switch on.",
+      "enum": [
+        "MALFORMED_REQUEST",
+        "MALFORMED_REQUEST_RATE_LIMITED"
+      ]
+    },
     "RequiredNext": {
       "type": "object",
       "additionalProperties": false,
@@ -192,8 +200,9 @@
           "type": "string",
           "minLength": 1,
           "maxLength": 256,
-          "description": "Required when decision != APPROVED; identifies why the decision was not APPROVED."
+          "description": "Required when decision != APPROVED; identifies why the decision was not APPROVED. Free-form prose; pair with `reasonCode` for machine routing."
         },
+        "reasonCode": { "$ref": "#/definitions/ReasonCode" },
         "requiredNext": { "$ref": "#/definitions/RequiredNext" },
         "correlation_id": { "$ref": "#/definitions/TrackingId" }
       }

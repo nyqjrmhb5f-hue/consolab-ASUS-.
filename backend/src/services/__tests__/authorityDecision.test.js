@@ -9,6 +9,18 @@ import {
   validateAuthorityDecision,
   SCHEMA_VERSION
 } from "../authorityDecision.js";
+import {
+  createMalformedRequestRateLimiter,
+  buildRateLimitKey
+} from "../malformedRequestRateLimit.js";
+import {
+  computeRequestHash,
+  writeMalformedRequestEvidence,
+  writeMalformedRequestRateLimitSummary,
+  summarizeErrorClasses,
+  classifyValidationError,
+  EXPECTED_SCHEMA_ID
+} from "../malformedRequestEvidence.js";
 
 import { payloadHash } from "../../lib/stableJson.js";
 import { signPayloadHash, verifyPayloadHash } from "../keyStore.js";
@@ -80,12 +92,62 @@ function makeEvidenceRecorder() {
   };
 }
 
+function makeMalformedEvidenceRecorder() {
+  const malformedRows = [];
+  const summaryRows = [];
+  let counter = 0;
+  return {
+    malformedRows,
+    summaryRows,
+    writeMalformed: async (entry) => {
+      counter += 1;
+      malformedRows.push(entry);
+      const txHash = crypto
+        .createHash("sha256")
+        .update(`malformed:${counter}:${JSON.stringify(entry.rawRequest)}`)
+        .digest("hex");
+      return {
+        event_id: `${entry.ts.replace(/[^0-9TZ]/g, "")}-${txHash.slice(0, 16)}`,
+        tx_hash: txHash,
+        request_hash: txHash,
+        recorded_at: entry.ts,
+        ref_path: "04_EVIDENCE_ROOM/malformed_requests/events.jsonl",
+        audit_trails_ref_path: "04_EVIDENCE_ROOM/audit_trails/events.jsonl"
+      };
+    },
+    writeSummary: async (entry) => {
+      summaryRows.push(entry);
+      const txHash = crypto
+        .createHash("sha256")
+        .update(`summary:${entry.rateLimitKey}:${entry.windowStartedAt}:${entry.hitCount}`)
+        .digest("hex");
+      return {
+        event_id: `${entry.ts.replace(/[^0-9TZ]/g, "")}-${txHash.slice(0, 16)}`,
+        tx_hash: txHash,
+        recorded_at: entry.ts,
+        ref_path: "04_EVIDENCE_ROOM/malformed_requests/events.jsonl",
+        audit_trails_ref_path: "04_EVIDENCE_ROOM/audit_trails/events.jsonl"
+      };
+    }
+  };
+}
+
 function buildDeps(overrides = {}) {
   const keyPair = overrides.keyPair || makeTestKeyPair();
   const recorder = overrides.recorder || makeEvidenceRecorder();
+  const malformedRecorder = overrides.malformedRecorder || makeMalformedEvidenceRecorder();
+  const rateLimiter =
+    overrides.malformedRateLimiter ||
+    createMalformedRequestRateLimiter({
+      limit: overrides.rateLimit ?? 10,
+      windowMs: overrides.rateLimitWindowMs ?? 60_000,
+      now: overrides.rateLimitNow
+    });
   return {
     keyPair,
     recorder,
+    malformedRecorder,
+    rateLimiter,
     deps: {
       writeEvidence: recorder.write,
       loadActiveKeyPair: async () => keyPair,
@@ -93,7 +155,12 @@ function buildDeps(overrides = {}) {
       getCommandPolicyMap: () => overrides.policyMap || STUB_POLICY_MAP,
       now: overrides.now || (() => "2026-04-03T12:00:00.000Z"),
       sourceIp: "127.0.0.1",
-      sealId: "test-seal"
+      sealId: "test-seal",
+      sourceSurface: overrides.sourceSurface || "test",
+      tunnelSessionId: overrides.tunnelSessionId || null,
+      writeMalformedRequestEvidence: malformedRecorder.writeMalformed,
+      writeMalformedRequestRateLimitSummary: malformedRecorder.writeSummary,
+      malformedRateLimiter: rateLimiter
     }
   };
 }
@@ -223,16 +290,26 @@ describe("decideAuthority — refusal axes (scope / standard / policy)", () => {
     assert.deepEqual(decision.requiredNext, { axes: ["scope", "standard", "policy"] });
   });
 
-  test("schema-invalid request (missing tracking_id) → unbound NEEDS_INFO, NO evidence", async () => {
-    const { recorder, deps } = buildDeps();
+  test("schema-invalid request (missing tracking_id) → REJECTED + reasonCode=MALFORMED_REQUEST + evidence in audit_trails + malformed_requests", async () => {
+    const { recorder, malformedRecorder, deps } = buildDeps();
     const req = buildRequest();
     delete req.tracking_id;
     const decision = await decideAuthority({ request: req, deps });
-    assert.equal(decision.decision, "NEEDS_INFO");
+    assert.equal(decision.decision, "REJECTED");
+    assert.equal(decision.reasonCode, "MALFORMED_REQUEST");
     assert.match(decision.reason, /^schema_invalid:/);
-    assert.equal(decision._meta.evidence_written, false);
-    assert.equal(recorder.calls.length, 0);
-    assert.equal(decision.signature, "", "unbound packets must not be signed");
+    assert.equal(decision._meta.evidence_written, true);
+    assert.equal(decision._meta.rate_limited, false);
+    assert.equal(decision.evidenceStamp.ref_path, "04_EVIDENCE_ROOM/malformed_requests/events.jsonl");
+    assert.equal(recorder.calls.length, 0, "bound writeEvidence is NOT used for malformed requests");
+    assert.equal(malformedRecorder.malformedRows.length, 1);
+    assert.equal(malformedRecorder.summaryRows.length, 0);
+    const malformedEntry = malformedRecorder.malformedRows[0];
+    assert.equal(malformedEntry.sourceSurface, "test");
+    assert.equal(malformedEntry.sourceIp, "127.0.0.1");
+    assert.equal(malformedEntry.rawRequest.action, "deploy_feature_gate");
+    assert.ok(Array.isArray(malformedEntry.schemaErrors));
+    assert.ok(malformedEntry.schemaErrors.length > 0);
   });
 
   test("policy version mismatch → REJECTED + evidence + reason mentions both versions", async () => {
@@ -403,3 +480,257 @@ describe("decideAuthority — evidence binding contract", () => {
     }
   });
 });
+
+describe("decideAuthority — malformed-request handling", () => {
+  test("schema-invalid additionalProperties → REJECTED + MALFORMED_REQUEST + evidence captures schemaErrors", async () => {
+    const { malformedRecorder, deps } = buildDeps();
+    const req = buildRequest();
+    req.unexpected_field = "boom";
+    const decision = await decideAuthority({ request: req, deps });
+    assert.equal(decision.decision, "REJECTED");
+    assert.equal(decision.reasonCode, "MALFORMED_REQUEST");
+    assert.equal(decision._meta.evidence_written, true);
+    assert.equal(malformedRecorder.malformedRows.length, 1);
+    assert.equal(malformedRecorder.malformedRows[0].schemaErrors.length > 0, true);
+    // A.1 tightening: every validator error carries a stable `code` so the
+    // evidence row can route on machine-readable error_class buckets.
+    for (const err of malformedRecorder.malformedRows[0].schemaErrors) {
+      assert.equal(typeof err.code, "string");
+      assert.ok(err.code.length > 0, "validator must attach a non-empty code");
+    }
+  });
+
+  test("schema validator emits stable error codes for known violations", () => {
+    const cases = [
+      { mutate: (r) => { delete r.tracking_id; }, expected: "missing_required_property" },
+      { mutate: (r) => { r.unexpected_field = "x"; }, expected: "additional_property_disallowed" },
+      { mutate: (r) => { r.schema_version = "v0"; }, expected: "const_mismatch" },
+      { mutate: (r) => { r.tracking_id = 42; }, expected: "type_mismatch" },
+      { mutate: (r) => { r.action = "BAD ACTION"; }, expected: "pattern_mismatch" },
+      { mutate: (r) => { r.scope = ["dup", "dup"]; }, expected: "unique_items_violation" }
+    ];
+    for (const { mutate, expected } of cases) {
+      const req = buildRequest();
+      mutate(req);
+      const result = validateAuthorityRequest(req);
+      assert.equal(result.ok, false, `case ${expected} expected to fail validation`);
+      const codes = result.errors.map((e) => e.code);
+      assert.ok(codes.includes(expected), `expected error code ${expected} in ${JSON.stringify(codes)}`);
+    }
+  });
+
+  test("malformed packet payloadHash equals sha256(stableStringify(rawRequest)) so the rejection is non-repudiable", async () => {
+    const { keyPair, deps } = buildDeps();
+    const req = buildRequest();
+    delete req.tracking_id;
+    const decision = await decideAuthority({ request: req, deps });
+    const expected = `sha256:${computeRequestHash(req)}`;
+    assert.equal(decision.payloadHash, expected);
+    // Signature over that hash must verify.
+    const verified = verifyPayloadHash(
+      decision.payloadHash,
+      decision.signature,
+      keyPair.publicKey,
+      keyPair.keyType
+    );
+    assert.equal(verified, true);
+  });
+
+  test("malformed decision packets satisfy the AuthorityDecision schema lock (REJECTED branch with reasonCode)", async () => {
+    const { deps } = buildDeps();
+    const req = buildRequest();
+    delete req.tracking_id;
+    const decision = await decideAuthority({ request: req, deps });
+    const result = validateAuthorityDecision(stripMeta(decision));
+    assert.equal(result.ok, true, JSON.stringify(result.errors));
+    assert.equal(decision.reasonCode, "MALFORMED_REQUEST");
+  });
+});
+
+describe("decideAuthority — malformed rate limiting", () => {
+  test("11th malformed request in a 60s window for the same key → REJECTED + MALFORMED_REQUEST_RATE_LIMITED", async () => {
+    const { malformedRecorder, deps } = buildDeps({ rateLimit: 10 });
+    const malformedReq = () => {
+      const r = buildRequest();
+      delete r.tracking_id;
+      return r;
+    };
+
+    for (let i = 0; i < 10; i++) {
+      const decision = await decideAuthority({ request: malformedReq(), deps });
+      assert.equal(decision.decision, "REJECTED");
+      assert.equal(decision.reasonCode, "MALFORMED_REQUEST", `request ${i + 1} should still be allowed`);
+    }
+    assert.equal(malformedRecorder.malformedRows.length, 10);
+    assert.equal(malformedRecorder.summaryRows.length, 0);
+
+    const overLimit = await decideAuthority({ request: malformedReq(), deps });
+    assert.equal(overLimit.decision, "REJECTED");
+    assert.equal(overLimit.reasonCode, "MALFORMED_REQUEST_RATE_LIMITED");
+    assert.equal(overLimit._meta.rate_limited, true);
+    assert.equal(overLimit._meta.rate_limit_hit_count, 10);
+    assert.equal(malformedRecorder.malformedRows.length, 10, "rate-limited requests must NOT add to the rich row stream");
+    assert.equal(malformedRecorder.summaryRows.length, 1, "first rate-limited hit emits exactly one summary row");
+  });
+
+  test("multiple rate-limited hits in the same 60s window emit only ONE summary row per key", async () => {
+    const { malformedRecorder, deps } = buildDeps({ rateLimit: 2 });
+    const malformedReq = () => {
+      const r = buildRequest();
+      delete r.tracking_id;
+      return r;
+    };
+
+    // Burn through the limit.
+    await decideAuthority({ request: malformedReq(), deps });
+    await decideAuthority({ request: malformedReq(), deps });
+    // 5 rate-limited follow-ups inside the same window.
+    for (let i = 0; i < 5; i++) {
+      const d = await decideAuthority({ request: malformedReq(), deps });
+      assert.equal(d.reasonCode, "MALFORMED_REQUEST_RATE_LIMITED");
+    }
+    assert.equal(malformedRecorder.summaryRows.length, 1, "summary row must be rate-limited to one per minute per key");
+  });
+
+  test("different rate-limit keys do NOT share a counter", async () => {
+    const { malformedRecorder, deps } = buildDeps({ rateLimit: 2 });
+    const malformedReq = () => {
+      const r = buildRequest();
+      delete r.tracking_id;
+      return r;
+    };
+
+    // Two requests for source-A → exhausts source-A.
+    await decideAuthority({ request: malformedReq(), deps: { ...deps, rateLimitKey: "source-A" } });
+    await decideAuthority({ request: malformedReq(), deps: { ...deps, rateLimitKey: "source-A" } });
+    const aOverLimit = await decideAuthority({ request: malformedReq(), deps: { ...deps, rateLimitKey: "source-A" } });
+    assert.equal(aOverLimit.reasonCode, "MALFORMED_REQUEST_RATE_LIMITED");
+
+    // First request for source-B should still be allowed.
+    const bAllowed = await decideAuthority({ request: malformedReq(), deps: { ...deps, rateLimitKey: "source-B" } });
+    assert.equal(bAllowed.reasonCode, "MALFORMED_REQUEST");
+    assert.equal(malformedRecorder.malformedRows.length, 3, "source-A's 2 + source-B's 1");
+  });
+
+  test("buildRateLimitKey: source_ip + tunnel_session_id wins over correlation_id when both present", () => {
+    const k1 = buildRateLimitKey({ sourceIp: "10.0.0.1", correlationId: "corr-1", tunnelSessionId: "tun-x" });
+    const k2 = buildRateLimitKey({ sourceIp: "10.0.0.1", correlationId: "corr-2", tunnelSessionId: "tun-x" });
+    assert.equal(k1, k2);
+    assert.equal(k1, "10.0.0.1|tun-x");
+  });
+
+  test("buildRateLimitKey: falls back to 'anon' when no session/correlation", () => {
+    const key = buildRateLimitKey({ sourceIp: "10.0.0.1" });
+    assert.equal(key, "10.0.0.1|anon");
+  });
+
+  test("malformed_requests rich row carries expected_schema_id, schema_version, error_classes, error_class_counts", async () => {
+    const captured = [];
+    const fakeAppend = async (filePath, payload) => {
+      captured.push({ filePath, payload });
+    };
+    const stamp = await writeMalformedRequestEvidence({
+      rawRequest: { schema_version: "v0", action: "BAD ACTION" },
+      schemaErrors: [
+        { path: "AuthorityRequest.schema_version", message: "...", code: "const_mismatch" },
+        { path: "AuthorityRequest.action", message: "...", code: "pattern_mismatch" },
+        { path: "AuthorityRequest.tracking_id", message: "...", code: "missing_required_property" },
+        { path: "AuthorityRequest.payload", message: "...", code: "missing_required_property" },
+        { path: "AuthorityRequest.requested_by", message: "...", code: "missing_required_property" },
+        { path: "AuthorityRequest.ts", message: "...", code: "missing_required_property" }
+      ],
+      sourceSurface: "test-surface",
+      sourceIp: "10.1.2.3",
+      correlationId: "corr-A",
+      tunnelSessionId: null,
+      ts: "2026-04-03T12:00:00.000Z",
+      appendJsonl: fakeAppend
+    });
+    assert.ok(stamp.event_id);
+    assert.ok(stamp.tx_hash);
+    assert.equal(stamp.ref_path, "04_EVIDENCE_ROOM/malformed_requests/events.jsonl");
+    assert.equal(stamp.audit_trails_ref_path, "04_EVIDENCE_ROOM/audit_trails/events.jsonl");
+
+    assert.equal(captured.length, 2, "must write to audit_trails AND malformed_requests");
+    const audit = captured.find((c) => c.filePath.endsWith("audit_trails/events.jsonl"));
+    const rich = captured.find((c) => c.filePath.endsWith("malformed_requests/events.jsonl"));
+    assert.ok(audit && rich);
+
+    // audit row stays minimal
+    assert.equal(audit.payload.action, "authority.malformed_request");
+    assert.equal(audit.payload.result, "rejected");
+    assert.ok(!("error_classes" in audit.payload), "audit row must not carry rich error fields");
+
+    // rich row carries the A.1 fields
+    assert.equal(rich.payload.expected_schema_id, EXPECTED_SCHEMA_ID);
+    assert.equal(rich.payload.expected_schema_id, "AuthorityRequest");
+    assert.equal(rich.payload.schema_version, SCHEMA_VERSION);
+    assert.deepEqual(
+      rich.payload.error_classes,
+      ["const_mismatch", "missing_required_property", "pattern_mismatch"],
+      "error_classes must be sorted unique enum keys"
+    );
+    assert.deepEqual(rich.payload.error_class_counts, {
+      const_mismatch: 1,
+      missing_required_property: 4,
+      pattern_mismatch: 1
+    });
+    assert.equal(rich.payload.parse_error_count, 6);
+    // Each parse_errors entry also carries error_class for downstream routing.
+    for (const e of rich.payload.parse_errors) {
+      assert.ok(typeof e.error_class === "string" && e.error_class.length > 0);
+    }
+  });
+
+  test("malformed rate-limit summary row carries expected_schema_id and schema_version", async () => {
+    const captured = [];
+    const fakeAppend = async (filePath, payload) => {
+      captured.push({ filePath, payload });
+    };
+    await writeMalformedRequestRateLimitSummary({
+      rateLimitKey: "10.1.2.3|tun-x",
+      hitCount: 12,
+      windowStartedAt: "2026-04-03T11:59:00.000Z",
+      ts: "2026-04-03T12:00:00.000Z",
+      appendJsonl: fakeAppend
+    });
+    const rich = captured.find((c) => c.filePath.endsWith("malformed_requests/events.jsonl"));
+    assert.ok(rich);
+    assert.equal(rich.payload.expected_schema_id, "AuthorityRequest");
+    assert.equal(rich.payload.schema_version, SCHEMA_VERSION);
+    assert.equal(rich.payload.action, "authority.malformed_request_rate_limit_hit");
+    assert.equal(rich.payload.reason_code, "MALFORMED_REQUEST_RATE_LIMITED");
+    assert.equal(rich.payload.hit_count, 12);
+  });
+
+  test("summarizeErrorClasses + classifyValidationError fall back to 'unknown' on missing code", () => {
+    assert.equal(classifyValidationError(null), "unknown");
+    assert.equal(classifyValidationError({}), "unknown");
+    assert.equal(classifyValidationError({ code: "" }), "unknown");
+    assert.equal(classifyValidationError({ code: "type_mismatch" }), "type_mismatch");
+    assert.deepEqual(summarizeErrorClasses(null), {});
+    assert.deepEqual(
+      summarizeErrorClasses([{ code: "type_mismatch" }, { code: "type_mismatch" }, {}]),
+      { type_mismatch: 2, unknown: 1 }
+    );
+  });
+
+  test("rate limiter sliding window: events older than windowMs are pruned", async () => {
+    let nowMs = 0;
+    const limiter = createMalformedRequestRateLimiter({
+      limit: 2,
+      windowMs: 1_000,
+      now: () => nowMs
+    });
+    nowMs = 0;       limiter.consume("k"); // 1
+    nowMs = 100;     limiter.consume("k"); // 2 → at limit
+    nowMs = 500;     assert.equal(limiter.consume("k").allowed, false);
+    nowMs = 1_500;   assert.equal(limiter.consume("k").allowed, true, "first event aged out, room for one more");
+  });
+});
+
+function stripMeta(decision) {
+  const copy = { ...decision };
+  delete copy._meta;
+  return copy;
+}
