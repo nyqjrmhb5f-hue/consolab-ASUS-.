@@ -1,0 +1,16 @@
+{
+  "name": "consolab-asus-tooling",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Repo-level scripting and tooling for ConsoleLab. Backend and frontend live in their own workspaces.",
+  "type": "module",
+  "scripts": {
+    "report:daily": "tsx scripts/archive/consolab-daily-report.ts",
+    "test:scripts": "node --import tsx --test \"scripts/archive/__tests__/*.test.ts\""
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.4",
+    "tsx": "^4.19.2",
+    "typescript": "^5.6.3"
+  }
+}

@@ -1,0 +1,14 @@
+[Unit]
+Description=ConsoleLab daily authority report archive
+Documentation=file:///home/t79/vyrdon/consolelab/archives/daily/README.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/t79/vyrdon/consolelab
+Environment=NODE_ENV=production
+# Run via npx tsx so this works without a separate build step.
+ExecStart=/usr/bin/npx --yes tsx /home/t79/vyrdon/consolelab/scripts/archive/consolab-daily-report.ts
+NoNewPrivileges=true
+PrivateTmp=true
