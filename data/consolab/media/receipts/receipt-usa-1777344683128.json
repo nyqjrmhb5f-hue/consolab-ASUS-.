@@ -1,8 +1,0 @@
-{
-  "type": "VYRDON_RECEIPT",
-  "market": "usa",
-  "evidence_hash": "75e26eacd433028f9f9510cfc7913e2f13a21a75607373dd4c4ad1b4fc0800bd",
-  "issued_at": "2026-04-28T02:51:23.127Z",
-  "status": "VALID",
-  "verify_url": "https://vyrdx.vyrdon.com/verify/75e26eacd433028f9f9510cfc7913e2f13a21a75607373dd4c4ad1b4fc0800bd"
-}

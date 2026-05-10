@@ -12,3 +12,6 @@ id_ed25519*
 # runtime evidence hot files
 04_EVIDENCE_ROOM/actions/events.jsonl
 *.log
+
+# generated outputs
+/data/consolab/media/
