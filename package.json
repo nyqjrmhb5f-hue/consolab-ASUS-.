@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "report:daily": "tsx scripts/archive/consolab-daily-report.ts",
-    "test:scripts": "node --import tsx --test \"scripts/archive/__tests__/*.test.ts\""
+    "test:scripts": "node --import tsx --test scripts/archive/__tests__/*.test.ts"
   },
   "devDependencies": {
     "@types/node": "^22.7.4",
