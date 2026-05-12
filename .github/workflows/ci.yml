@@ -14,12 +14,13 @@
 
 name: CI
 
-on:
-  pull_request:
-    branches: [main]
-  push:
-    branches: [main]
-
+ on:
+   pull_request:
+     branches: [main]
+   push:
+     branches: [main]
++  merge_group:
++    branches: [main]
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
