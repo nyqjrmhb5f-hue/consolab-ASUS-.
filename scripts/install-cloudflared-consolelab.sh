@@ -73,7 +73,7 @@ if command -v loginctl >/dev/null 2>&1; then
   fi
 fi
 
-echo "[4/5] disabling any other cloudflared user units (single-tunnel-owner rule)"
+echo "[4/6] disabling any other cloudflared user units (single-tunnel-owner rule)"
 mapfile -t OTHER_UNITS < <(
   systemctl --user list-units --type=service --no-legend --all 2>/dev/null \
     | awk '{print $1}' \
@@ -89,7 +89,37 @@ else
   echo "  - no other cloudflared user units found"
 fi
 
-echo "[5/5] installing user units"
+# Process-level dedup. A cloudflared tunnel started outside systemd (e.g.
+# `cloudflared tunnel run` from a screen session) won't appear in the unit
+# list and won't be stopped by the disable step above. Kill those strays
+# now so the canonical user unit is the only owner left standing.
+echo "[5/6] dedup cloudflared processes (only the canonical unit may run)"
+mapfile -t TUNNEL_PIDS < <(pgrep -u "${USER}" -f 'cloudflared tunnel' 2>/dev/null || true)
+if [[ ${#TUNNEL_PIDS[@]} -gt 0 ]]; then
+  for pid in "${TUNNEL_PIDS[@]}"; do
+    cmd="$(ps -p "${pid}" -o args= 2>/dev/null || true)"
+    echo "  - SIGTERM pid ${pid}: ${cmd}"
+    kill -TERM "${pid}" 2>/dev/null || true
+  done
+  # Give them 5s to exit cleanly before SIGKILL escalation.
+  for _ in 1 2 3 4 5; do
+    sleep 1
+    if ! pgrep -u "${USER}" -f 'cloudflared tunnel' >/dev/null 2>&1; then
+      break
+    fi
+  done
+  mapfile -t STILL < <(pgrep -u "${USER}" -f 'cloudflared tunnel' 2>/dev/null || true)
+  if [[ ${#STILL[@]} -gt 0 ]]; then
+    for pid in "${STILL[@]}"; do
+      echo "  - SIGKILL pid ${pid} (did not exit on TERM)"
+      kill -KILL "${pid}" 2>/dev/null || true
+    done
+  fi
+else
+  echo "  - no cloudflared tunnel processes running"
+fi
+
+echo "[6/6] installing user units"
 mkdir -p "${USER_UNIT_DIR}"
 install -m 644 "${CLOUDFLARED_UNIT_SRC}" "${USER_UNIT_DIR}/cloudflared-consolelab.service"
 install -m 644 "${BACKEND_UNIT_SRC}" "${USER_UNIT_DIR}/consolelab-backend.service"
@@ -113,8 +143,15 @@ Next steps (operator must do these — not automated):
      ${TUNNEL_CONFIG_DST}'s 'credentials-file:' field.
      Default: /home/t79/.cloudflared/${TUNNEL_ID}.json
 
-  2. Create the DNS route (interactive Cloudflare auth required):
+  2. Create the DNS routes (interactive Cloudflare auth required). The
+     ensure-cloudflared-routes.sh wrapper does all 3 hostnames idempotently:
 
+       bash scripts/ensure-cloudflared-routes.sh
+
+     or run them by hand:
+
+       cloudflared tunnel route dns ${TUNNEL_ID} consolelab.vyrdon.com
+       cloudflared tunnel route dns ${TUNNEL_ID} consolab.vyrdon.com
        cloudflared tunnel route dns ${TUNNEL_ID} authority.consolelab.vyrdon.com
 
   3. Configure Cloudflare Zero Trust Access for the authority host.
