@@ -1,0 +1,27 @@
+[Unit]
+Description=ConsoleLab authority backend (localhost-bound; tunneled via cloudflared-consolelab)
+Documentation=https://github.com/nyqjrmhb5f-hue/consolab-ASUS-./blob/main/09_DEPLOYMENT/deploy-lock-checklist.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/t79/vyrdon/consolelab/backend
+# These env vars are read by backend/src/config.js. The defaults there are
+# 127.0.0.1:8080 — we override the port to 18080 so the authority surface is
+# distinct from the control surface (cloudflared maps both via vyrdon-
+# consolelab.yml). Never set CONSOLELAB_BIND_HOST=0.0.0.0 — Cloudflare Access
+# is the ONLY way in.
+Environment=NODE_ENV=production
+Environment=CONSOLELAB_BIND_HOST=127.0.0.1
+Environment=CONSOLELAB_BIND_PORT=18080
+# Wrapper resolves an fnm-managed (or system) node — systemd user units don't
+# inherit the interactive shell's PATH.
+ExecStart=/bin/bash /home/t79/vyrdon/consolelab/scripts/run-consolelab-backend.sh
+Restart=on-failure
+RestartSec=2
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=default.target

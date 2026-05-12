@@ -1,0 +1,19 @@
+[Unit]
+Description=Cloudflared Tunnel (ConsoleLab)
+Documentation=file:///home/t79/ASUS/ASUSX/ops/cloudflare/vyrdon-consolelab.yml
+Documentation=https://github.com/nyqjrmhb5f-hue/consolab-ASUS-./blob/main/09_DEPLOYMENT/deploy-lock-checklist.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+# Single-source-of-truth config. Installer pins this path; if you change it,
+# also update ops/cloudflare/vyrdon-consolelab.yml's "Live path" header.
+ExecStart=/usr/local/bin/cloudflared tunnel --config /home/t79/ASUS/ASUSX/ops/cloudflare/vyrdon-consolelab.yml run
+Restart=on-failure
+RestartSec=2
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=default.target

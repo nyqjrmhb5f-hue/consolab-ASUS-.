@@ -1,0 +1,42 @@
+# Canonical Cloudflared tunnel config for the ConsoleLab authority host.
+#
+# Live path on ASUS: /home/t79/ASUS/ASUSX/ops/cloudflare/vyrdon-consolelab.yml
+# Unit consuming it:  cloudflared-consolelab.service (user-level systemd unit)
+#
+# Hard constraints encoded here (Follow-up D / D-LOCK):
+#   - protocol: http2          # quic blackholes on some ISPs; pin http2 for determinism
+#   - edge-ip-version: 4       # IPv6 path flapping on the ASUS NIC; pin to v4
+#   - 3 named-host ingress rules + a 404 catch-all (no implicit routes)
+#   - all origins point at 127.0.0.1 — backend never binds 0.0.0.0
+#   - exactly one tunnel owner (this file). No second config, no second unit.
+#
+# Tunnel UUID is operational metadata (not secret). credentials-file holds the
+# tunnel's signing key and IS secret — never commit the actual JSON. Path is a
+# placeholder that the installer fills from the operator's secrets dir.
+
+protocol: http2
+edge-ip-version: 4
+
+tunnel: ac840436-bc21-43b0-9548-198ea7fc0ab4
+credentials-file: /home/t79/.cloudflared/ac840436-bc21-43b0-9548-198ea7fc0ab4.json
+
+ingress:
+  - hostname: consolelab.vyrdon.com
+    service: http://127.0.0.1:8080
+    originRequest:
+      connectTimeout: 5s
+      noTLSVerify: true
+
+  - hostname: authority.consolelab.vyrdon.com
+    service: http://127.0.0.1:18080
+    originRequest:
+      connectTimeout: 5s
+      noTLSVerify: true
+
+  - hostname: consolab.vyrdon.com
+    service: http://127.0.0.1:8080
+    originRequest:
+      connectTimeout: 5s
+      noTLSVerify: true
+
+  - service: http_status:404
