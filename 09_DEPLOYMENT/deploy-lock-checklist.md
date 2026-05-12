@@ -43,6 +43,17 @@ tunnel). Each step is idempotent.
       `/home/t79/.cloudflared/ac840436-bc21-43b0-9548-198ea7fc0ab4.json`
 - [ ] The backend repo is checked out under `/home/t79/vyrdon/consolelab/`
 
+### 0.5 Baseline capture (read-only — run before any mutation)
+
+- [ ] Capture a frozen "before" snapshot of the host into
+      `04_EVIDENCE_ROOM/runtime_journals/`:
+      `bash scripts/capture-deploy-lock-baseline.sh`
+      Output file is `deploy-lock-baseline-<UTC>.md`. The file proves which
+      control-surface port is actually listening (`:8080` vs `:7821`), how
+      many cloudflared processes exist before dedup, and the current public
+      response for each of the 3 hostnames (including any Cloudflare 1033
+      errors).
+
 ### 1. Authority backend (localhost-only)
 
 - [ ] Run the installer:
@@ -67,12 +78,21 @@ tunnel). Each step is idempotent.
       matching `cloudflared*.service`:
       `systemctl --user list-units --type=service --all | grep cloudflared`
 
-### 3. DNS route (interactive Cloudflare auth required)
+### 3. DNS routes (interactive Cloudflare auth required)
 
-- [ ] Run, once per hostname that isn't already routed:
-      `cloudflared tunnel route dns ac840436-bc21-43b0-9548-198ea7fc0ab4 authority.consolelab.vyrdon.com`
-      The other two hostnames may already be routed from prior tunnel setups;
-      `cloudflared tunnel route list` shows the current set.
+- [ ] Ensure all 3 hostnames are routed at this tunnel UUID. The wrapper
+      script runs the `route dns` command for each hostname idempotently:
+      `bash scripts/ensure-cloudflared-routes.sh`
+      Or by hand:
+      ```
+      cloudflared tunnel route dns ac840436-bc21-43b0-9548-198ea7fc0ab4 consolelab.vyrdon.com
+      cloudflared tunnel route dns ac840436-bc21-43b0-9548-198ea7fc0ab4 consolab.vyrdon.com
+      cloudflared tunnel route dns ac840436-bc21-43b0-9548-198ea7fc0ab4 authority.consolelab.vyrdon.com
+      ```
+      If Cloudflare returns `An A, AAAA, or CNAME record already exists` and
+      it points at a *different* tunnel, the existing record must be removed
+      in the Cloudflare dashboard first — this is the most common cause of
+      Cloudflare error 1033 on hostnames you expect to work.
 
 ### 4. Cloudflare Zero Trust Access
 
