@@ -1,4 +1,4 @@
- ConsoleLab CI — runs on every PR, push to main, and merge-queue entry.
+# ConsoleLab CI — runs on every PR, push to main, and merge-queue entry.
 #
 # Goals (per IQ200 follow-up E):
 #   - prove backend tests pass on every PR (zero-dep node:test suite)
@@ -11,9 +11,9 @@
 #
 # Jobs are independent so failures localize cleanly. Concurrency cancels older
 # runs on the same ref so a force-push doesn't pile up runners.
- 
+
 name: CI
- 
+
 on:
   pull_request:
     branches: [main]
@@ -21,14 +21,14 @@ on:
     branches: [main]
   merge_group:
     branches: [main]
- 
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
- 
+
 permissions:
   contents: read
- 
+
 jobs:
   backend:
     name: backend (test + build)
@@ -54,7 +54,7 @@ jobs:
       - name: build
         working-directory: backend
         run: npm run build
- 
+
   frontend:
     name: frontend (build)
     runs-on: ubuntu-latest
@@ -76,7 +76,7 @@ jobs:
       - name: build
         working-directory: frontend
         run: npm run build
- 
+
   schemas:
     name: 06_INTERFACES schema lock
     runs-on: ubuntu-latest
@@ -87,7 +87,7 @@ jobs:
           node-version: 20.x
       - name: validate locked schemas
         run: node .github/scripts/validate-locked-schemas.mjs
- 
+
   scripts:
     name: archive scripts (test + typecheck)
     runs-on: ubuntu-latest
@@ -118,14 +118,6 @@ jobs:
             npm ci
           else
             npm install --no-audit --no-fund
-          fi
-      - if: steps.detect.outputs.present == 'true'
-        name: typecheck
-        run: npx --yes tsc --noEmit
-      - if: steps.detect.outputs.present == 'true'
-        name: tests
-        run: npm run test:scripts
- 
           fi
       - if: steps.detect.outputs.present == 'true'
         name: typecheck
